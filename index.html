@@ -27,7 +27,7 @@
     --safe-bot: env(safe-area-inset-bottom, 0px);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { font-family: -apple-system, 'Helvetica Neue', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 430px; margin: 0 auto; }
+  body { font-family: -apple-system, 'Helvetica Neue', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 430px; margin: 0 auto; font-size: 17px; }
   
   .screen { display: none; min-height: 100vh; flex-direction: column; }
   .screen.active { display: flex; }
@@ -38,16 +38,16 @@
     padding: calc(var(--safe-top) + 14px) 16px 14px;
     display: flex; align-items: center; gap: 12px;
   }
-  .topbar h1 { font-size: 18px; font-weight: 700; flex: 1; }
-  .topbar .back { font-size: 24px; cursor: pointer; padding: 0 4px; }
-  .topbar .action { font-size: 14px; font-weight: 600; background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; cursor: pointer; border: none; color: #fff; }
+  .topbar h1 { font-size: 20px; font-weight: 700; flex: 1; }
+  .topbar .back { font-size: 26px; cursor: pointer; padding: 0 4px; }
+  .topbar .action { font-size: 16px; font-weight: 600; background: rgba(255,255,255,0.2); padding: 7px 14px; border-radius: 20px; cursor: pointer; border: none; color: #fff; }
 
   .content { flex: 1; padding: 16px; overflow-y: auto; padding-bottom: calc(var(--safe-bot) + 80px); }
 
   .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
-  .card-title { font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .card-title { font-size: 15px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
 
-  .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; text-align: center; }
+  .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; text-align: center; }
   .btn-primary { background: var(--green); color: #fff; }
   .btn-secondary { background: var(--green-pale); color: var(--green); border: 1.5px solid var(--green); }
   .btn-danger { background: #fdecea; color: var(--red); }
@@ -56,24 +56,24 @@
   .btn:active { opacity: 0.8; transform: scale(0.98); }
 
   .input-group { margin-bottom: 14px; }
-  .input-group label { font-size: 13px; color: var(--muted); font-weight: 600; display: block; margin-bottom: 6px; }
+  .input-group label { font-size: 15px; color: var(--muted); font-weight: 600; display: block; margin-bottom: 6px; }
   .input-group input, .input-group select {
-    width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px;
-    font-size: 16px; background: var(--bg); color: var(--text); appearance: none;
+    width: 100%; padding: 13px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 17px; background: var(--bg); color: var(--text); appearance: none;
   }
   .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--green); background: #fff; }
 
   .list-item {
-    display: flex; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+    display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); cursor: pointer;
   }
   .list-item:last-child { border-bottom: none; }
   .list-item-main { flex: 1; }
-  .list-item-title { font-size: 16px; font-weight: 600; }
-  .list-item-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
-  .list-item-action { color: var(--muted); font-size: 20px; }
-  .list-item-badge { background: var(--green-pale); color: var(--green); font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-right: 8px; }
+  .list-item-title { font-size: 17px; font-weight: 600; }
+  .list-item-sub { font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .list-item-action { color: var(--muted); font-size: 22px; }
+  .list-item-badge { background: var(--green-pale); color: var(--green); font-size: 13px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-right: 8px; }
 
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 13px; font-weight: 700; }
   .badge-green { background: var(--green-pale); color: var(--green); }
   .badge-gold { background: #fef9e7; color: var(--gold); }
   .badge-red { background: #fdecea; color: var(--red); }
@@ -82,8 +82,8 @@
   /* Home screen */
   .home-logo { text-align: center; padding: 40px 0 20px; }
   .home-logo .icon { font-size: 64px; margin-bottom: 8px; }
-  .home-logo h1 { font-size: 26px; font-weight: 800; color: var(--green); }
-  .home-logo p { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .home-logo h1 { font-size: 28px; font-weight: 800; color: var(--green); }
+  .home-logo p { font-size: 16px; color: var(--muted); margin-top: 4px; }
   .home-menu-item {
     display: flex; align-items: center; gap: 14px; padding: 16px;
     background: var(--card); border-radius: var(--radius); margin-bottom: 10px;
@@ -97,16 +97,16 @@
   /* Scoring */
   .hole-nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--green); color: #fff; }
   .hole-nav .hole-info { text-align: center; }
-  .hole-nav .hole-num { font-size: 24px; font-weight: 800; }
-  .hole-nav .hole-detail { font-size: 12px; opacity: 0.85; }
+  .hole-nav .hole-num { font-size: 26px; font-weight: 800; }
+  .hole-nav .hole-detail { font-size: 14px; opacity: 0.85; }
   .hole-nav .nav-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .hole-nav .nav-btn:active { background: rgba(255,255,255,0.4); }
 
   .score-player { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
   .score-player-header { display: flex; align-items: center; margin-bottom: 12px; gap: 10px; }
   .player-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
-  .score-player-name { font-size: 16px; font-weight: 700; flex: 1; }
-  .score-player-hcp { font-size: 12px; color: var(--muted); }
+  .score-player-name { font-size: 18px; font-weight: 700; flex: 1; }
+  .score-player-hcp { font-size: 14px; color: var(--muted); }
 
   .stroke-control { display: flex; align-items: center; justify-content: space-between; background: var(--bg); border-radius: 10px; padding: 8px 14px; }
   .stroke-control label { font-size: 13px; color: var(--muted); font-weight: 600; }
@@ -125,8 +125,8 @@
 
   .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
   .summary-row:last-child { border-bottom: none; }
-  .summary-row .label { font-size: 14px; color: var(--muted); }
-  .summary-row .val { font-size: 15px; font-weight: 700; }
+  .summary-row .label { font-size: 16px; color: var(--muted); }
+  .summary-row .val { font-size: 17px; font-weight: 700; }
   .val.pos { color: var(--green); }
   .val.neg { color: var(--red); }
   .val.neu { color: var(--muted); }
@@ -149,13 +149,13 @@
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .stat-box { background: var(--bg); border-radius: 10px; padding: 12px; text-align: center; }
   .stat-box .sv { font-size: 22px; font-weight: 800; }
-  .stat-box .sl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stat-box .sl { font-size: 14px; color: var(--muted); margin-top: 2px; }
 
   /* Modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: flex-end; justify-content: center; }
   .modal-overlay.open { display: flex; }
   .modal-box { background: var(--card); border-radius: 20px 20px 0 0; padding: 20px 20px calc(var(--safe-bot) + 20px); width: 100%; max-height: 85vh; overflow-y: auto; }
-  .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+  .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 16px; }
   .modal-close { float: right; font-size: 24px; color: var(--muted); cursor: pointer; line-height: 1; }
 
   /* Toast */
@@ -163,7 +163,7 @@
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   .tabs { display: flex; background: var(--bg); border-radius: 12px; padding: 3px; margin-bottom: 14px; }
-  .tab { flex: 1; padding: 8px; border: none; background: none; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .tab { flex: 1; padding: 9px; border: none; background: none; border-radius: 10px; font-size: 16px; font-weight: 600; color: var(--muted); cursor: pointer; }
   .tab.active { background: #fff; color: var(--green); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 
   .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
@@ -171,7 +171,7 @@
   .tag.deselected { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
 
   .amount-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .amount-btn { padding: 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 15px; font-weight: 700; background: var(--bg); color: var(--text); cursor: pointer; text-align: center; }
+  .amount-btn { padding: 13px; border: 2px solid var(--border); border-radius: 10px; font-size: 17px; font-weight: 700; background: var(--bg); color: var(--text); cursor: pointer; text-align: center; }
   .amount-btn.selected { border-color: var(--green); background: var(--green-pale); color: var(--green); }
   .amount-btn:active { opacity: 0.8; }
 
@@ -300,15 +300,17 @@
         </div>
       </div>
       <div style="margin-top:14px">
-        <div class="card-title">每對輸贏上限（0=不限）</div>
-        <div class="amount-picker">
+        <div class="card-title">整局輸贏上限（0=不限）</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">套用到所有球員整局，超過上限以上限計算</div>
+        <div class="amount-picker" id="cap-picker">
           <div class="amount-btn selected" data-cap="0" onclick="pickCap(this)">不限</div>
           <div class="amount-btn" data-cap="8" onclick="pickCap(this)">8點</div>
           <div class="amount-btn" data-cap="10" onclick="pickCap(this)">10點</div>
           <div class="amount-btn" data-cap="12" onclick="pickCap(this)">12點</div>
         </div>
         <div class="input-group" style="margin-top:8px"><label>自訂上限</label>
-          <input type="number" id="custom-cap" placeholder="0=不限" inputmode="numeric">
+          <input type="number" id="custom-cap" placeholder="0=不限" inputmode="numeric"
+            oninput="if(this.value){document.querySelectorAll('#cap-picker .amount-btn').forEach(b=>b.classList.remove('selected'));selectedCap=0;}">
         </div>
       </div>
     </div>
@@ -364,6 +366,8 @@
     </div>
     <button class="nav-btn" onclick="nextHole()">›</button>
   </div>
+  <!-- Live status bar -->
+  <div id="live-status" style="background:#1a3a25;padding:8px 12px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch"></div>
   <div id="score-players-area" class="content" style="padding-top:10px"></div>
   <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--border);padding:12px 16px;padding-bottom:calc(var(--safe-bot)+12px);display:flex;gap:8px;z-index:50">
     <button class="btn btn-secondary" style="flex:1;padding:12px" onclick="showScorecard()">📋 計分卡</button>
@@ -477,8 +481,10 @@
 <div id="modal-course" class="modal-overlay">
   <div class="modal-box">
     <div class="modal-title">球場資料 <span class="modal-close" onclick="closeModal('modal-course')">×</span></div>
-    <div class="input-group"><label>球場名稱</label><input id="co-name" type="text" placeholder="例：台北球場"></div>
-    <div class="input-group"><label>地區</label><input id="co-region" type="text" placeholder="例：台北市"></div>
+    <div class="input-group"><label>球場名稱</label><input id="co-name" type="text" placeholder="例：林口球場"></div>
+    <div class="input-group"><label>國家</label><input id="co-country" type="text" placeholder="例：台灣" list="country-list">
+      <datalist id="country-list"></datalist>
+    </div>
     <div id="co-holes-setup"></div>
     <input type="hidden" id="co-id">
     <button class="btn btn-primary" onclick="saveCourse()">儲存</button>
@@ -542,7 +548,7 @@ function computeStrokeHoles(course, totalStrokes) {
 // ---- BUILT-IN COURSES ----
 const DEFAULT_COURSES = [
   {
-    id: 'tc01', name: '林口球場', region: '新北市',
+    id: 'tc01', name: '林口球場', country: '台灣', region: '新北市',
     holes: [
       {n:1,par:4,hcp:7,yards:380},{n:2,par:3,hcp:15,yards:165},{n:3,par:5,hcp:3,yards:520},
       {n:4,par:4,hcp:11,yards:360},{n:5,par:4,hcp:1,yards:430},{n:6,par:3,hcp:17,yards:155},
@@ -553,7 +559,7 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 'tc04', name: '林口第一 阿諾球道 Blue', region: '新北市',
+    id: 'tc04', name: '林口第一 阿諾球道 Blue', country: '台灣', region: '新北市',
     holes: [
       {n:1, par:4, hcp:11, yards:398},
       {n:2, par:3, hcp:9,  yards:190},
@@ -576,7 +582,7 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 'tc05', name: '林口第一 帕瑪球道 Blue', region: '新北市',
+    id: 'tc05', name: '林口第一 帕瑪球道 Blue', country: '台灣', region: '新北市',
     holes: [
       {n:1, par:5, hcp:7,  yards:504},
       {n:2, par:4, hcp:1,  yards:425},
@@ -599,7 +605,7 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 'tc02', name: '大屯球場', region: '台北市',
+    id: 'tc02', name: '大屯球場', country: '台灣', region: '台北市',
     holes: [
       {n:1,par:4,hcp:5,yards:395},{n:2,par:5,hcp:1,yards:545},{n:3,par:3,hcp:13,yards:170},
       {n:4,par:4,hcp:9,yards:375},{n:5,par:4,hcp:3,yards:440},{n:6,par:5,hcp:7,yards:515},
@@ -610,7 +616,7 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 'tc03', name: '南投球場', region: '南投縣',
+    id: 'tc03', name: '南投球場', country: '台灣', region: '南投縣',
     holes: [
       {n:1,par:4,hcp:3,yards:415},{n:2,par:3,hcp:17,yards:160},{n:3,par:5,hcp:9,yards:505},
       {n:4,par:4,hcp:7,yards:385},{n:5,par:4,hcp:1,yards:445},{n:6,par:3,hcp:15,yards:175},
@@ -678,18 +684,33 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 
 // ---- PLAYER COLORS ----
 const PC = ['#2d8a50','#1565c0','#c0392b','#c8971a'];
-const PE = ['甲','乙','丙','丁'];
 
-function playerAvatar(idx) {
-  return `<div class="player-avatar" style="background:${PC[idx%4]}22;color:${PC[idx%4]}">${PE[idx%4]}</div>`;
+function playerAvatar(idx, name) {
+  const label = name || '';
+  const fs = label.length <= 2 ? '12px' : label.length <= 3 ? '10px' : '9px';
+  return `<div class="player-avatar" style="background:${PC[idx%4]}22;color:${PC[idx%4]};font-size:${fs};line-height:1.1;text-align:center;padding:2px">${label}</div>`;
 }
 
 // ---- NEW GAME SETUP ----
 function setupNewGame() {
   const courses = DB.courses;
   const sel = document.getElementById('sel-course');
+  // Group by country, 台灣 first
+  const grouped = {};
+  courses.forEach(c => { const k = c.country||'台灣'; if(!grouped[k]) grouped[k]=[]; grouped[k].push(c); });
+  const countries = Object.keys(grouped).sort((a,b)=>a==='台灣'?-1:b==='台灣'?1:a.localeCompare(b));
   sel.innerHTML = '<option value="">請選擇球場...</option>';
-  courses.forEach(c => { sel.innerHTML += `<option value="${c.id}">${c.name} (${c.region})</option>`; });
+  countries.forEach(country => {
+    const og = document.createElement('optgroup');
+    og.label = `🌏 ${country}`;
+    grouped[country].forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
   const players = DB.players;
   const list = document.getElementById('player-select-list');
   list.innerHTML = '';
@@ -782,7 +803,7 @@ function updateSkinHcpMatrix() {
   selectedPlayers.forEach((pid, pi) => {
     const p = pmap[pid];
     html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-      <div style="width:28px;height:28px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0">${PE[pi%4]}</div>
+      <div style="width:28px;height:28px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0">${p.name}</div>
       <span style="flex:1;font-size:14px;font-weight:600">${p.name}</span>
       <span style="font-size:12px;color:var(--muted)">受讓</span>
       <button class="hbtn" onclick="adjSkinHcp('${pid}',-1)">−</button>
@@ -808,23 +829,44 @@ function updateLvTeamSetup() {
   const players = DB.players;
   const pmap = {};
   players.forEach(p => pmap[p.id] = p);
-  const names = selectedPlayers.map(id => pmap[id]?.name || id);
-  // First hole: assign team A = players[0],players[1] vs team B = players[2],players[3]
+
+  // lvTeamOrder stores current [teamA[0], teamA[1], teamB[0], teamB[1]] indices into selectedPlayers
+  if (!window.lvTeamOrder || window.lvTeamOrder.length !== 4) {
+    window.lvTeamOrder = [0, 1, 2, 3];
+  }
+
+  const order = window.lvTeamOrder;
+  const names = order.map(i => pmap[selectedPlayers[i]]?.name || selectedPlayers[i]);
+  const colors = order.map(i => PC[i % 4]);
+
   document.getElementById('lv-team-setup').innerHTML = `
-    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">第一洞配對（之後動態調整）</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div style="background:${PC[0]}15;border-radius:10px;padding:10px;text-align:center">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">A 隊</div>
-        <div style="font-weight:700;color:${PC[0]}">${names[0]}</div>
-        <div style="font-weight:700;color:${PC[1]}">${names[1]}</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:10px">第一洞配對（點擊球員可交換位置）</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center">
+      <div style="background:${colors[0]}15;border:2px solid ${colors[0]}40;border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">A隊</div>
+        <div style="font-weight:700;color:${colors[0]};font-size:13px;margin-bottom:4px">${names[0]}</div>
+        <div style="font-weight:700;color:${colors[1]};font-size:13px">${names[1]}</div>
       </div>
-      <div style="background:${PC[2]}15;border-radius:10px;padding:10px;text-align:center">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">B 隊</div>
-        <div style="font-weight:700;color:${PC[2]}">${names[2]}</div>
-        <div style="font-weight:700;color:${PC[3]}">${names[3]}</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button onclick="lvSwap(1,2)" style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg);font-size:11px;cursor:pointer">⇄</button>
+        <button onclick="lvSwap(0,2)" style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg);font-size:11px;cursor:pointer">⇄</button>
+        <button onclick="lvSwap(1,3)" style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg);font-size:11px;cursor:pointer">⇄</button>
+      </div>
+      <div style="background:${colors[2]}15;border:2px solid ${colors[2]}40;border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">B隊</div>
+        <div style="font-weight:700;color:${colors[2]};font-size:13px;margin-bottom:4px">${names[2]}</div>
+        <div style="font-weight:700;color:${colors[3]};font-size:13px">${names[3]}</div>
       </div>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-top:8px">💡 從第2洞起自動依當洞桿數重新配對（最低+最高同組）</div>`;
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">💡 從第2洞起自動依桿數重新配對（最低+最高同組）</div>`;
+}
+
+function lvSwap(i, j) {
+  if (!window.lvTeamOrder) window.lvTeamOrder = [0,1,2,3];
+  const tmp = window.lvTeamOrder[i];
+  window.lvTeamOrder[i] = window.lvTeamOrder[j];
+  window.lvTeamOrder[j] = tmp;
+  updateLvTeamSetup();
 }
 
 function toggleSkip(pid, opid, skipped) {
@@ -868,7 +910,7 @@ function pickLvAmount(el) {
   document.getElementById('lv-custom-amount').value = '';
 }
 function pickCap(el) {
-  el.closest('div').querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#cap-picker .amount-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   selectedCap = parseInt(el.dataset.cap);
   document.getElementById('custom-cap').value = '';
@@ -931,8 +973,12 @@ function startGame() {
   // ---- Las Vegas setup ----
   const lvCustom = document.getElementById('lv-custom-amount').value;
   const lvAmount = lvCustom ? parseInt(lvCustom) : selectedLvAmount;
-  // First hole teams: [0,1] vs [2,3]
-  const lvFirstTeam = [[selectedPlayers[0], selectedPlayers[1]], [selectedPlayers[2], selectedPlayers[3]]];
+  const order = window.lvTeamOrder || [0,1,2,3];
+  const lvFirstTeam = [
+    [selectedPlayers[order[0]], selectedPlayers[order[1]]],
+    [selectedPlayers[order[2]], selectedPlayers[order[3]]]
+  ];
+  window.lvTeamOrder = null; // reset for next game
 
   game = {
     courseId, course,
@@ -982,7 +1028,7 @@ function renderScoring() {
 
     html += `<div class="score-player">
       <div class="score-player-header">
-        ${playerAvatar(pi)}
+        ${playerAvatar(pi, p.name)}
         <div style="flex:1">
           <div class="score-player-name">${p.name}</div>
           <div style="font-size:11px;margin-top:3px;line-height:1.8">${opBadges}</div>
@@ -1001,6 +1047,7 @@ function renderScoring() {
   });
 
   area.innerHTML = html;
+  renderLiveStatus();
 }
 
 function getScoreName(s, par) {
@@ -1035,6 +1082,86 @@ function adjStroke(pid, delta) {
     el.textContent = v;
     el.style.color = getScoreColor(v, hole.par);
   }
+  renderLiveStatus();
+}
+
+function renderLiveStatus() {
+  const bar = document.getElementById('live-status');
+  if (!bar || !game) return;
+  const fmt = game.formats || { match: true };
+  let parts = [];
+
+  // Match play: cumulative points per player so far
+  if (fmt.match) {
+    const totals = calcCappedTotals();
+    const items = game.players.map((p, pi) => {
+      const pts = totals[p.id];
+      const color = pts > 0 ? '#6effa0' : pts < 0 ? '#ff8080' : '#aaa';
+      return `<span style="color:${color};font-weight:700;font-size:14px">${p.name} ${pts>0?'+':''}${pts}</span>`;
+    }).join('<span style="color:#555;margin:0 6px">|</span>');
+    parts.push(`<span style="color:#aaa;font-size:12px">比洞 </span>${items}`);
+  }
+
+  // Skin: current carry
+  if (fmt.skin) {
+    // Count carry by simulating up to currentHole
+    let carry = 0;
+    for (let h = 0; h <= game.currentHole; h++) {
+      const hole = game.course.holes[h];
+      const scores = {};
+      game.players.forEach(p => { 
+        const raw = game.holes[h][p.id] || hole.par;
+        const sh = game.skinHcpMap?.[p.id] || [];
+        scores[p.id] = sh[h] ? raw - 1 : raw;
+      });
+      const minScore = Math.min(...game.players.map(p => scores[p.id]));
+      const winners = game.players.filter(p => scores[p.id] === minScore);
+      if (winners.length === 1) {
+        carry = Math.max(0, carry - (Math.min(carry+1, 3) - 1));
+      } else {
+        carry++;
+      }
+    }
+    parts.push(`<span style="color:#aaa;font-size:12px">Skin </span><span style="color:#f0c040;font-weight:700;font-size:14px">保留${carry}洞</span>`);
+  }
+
+  // LV: current carry
+  if (fmt.lv) {
+    let carry = 0;
+    for (let h = 0; h <= game.currentHole; h++) {
+      const hole = game.course.holes[h];
+      const scores = {};
+      game.players.forEach(p => { scores[p.id] = game.holes[h][p.id] || hole.par; });
+      let teamA, teamB;
+      if (h === 0) { teamA = game.lvFirstTeam[0]; teamB = game.lvFirstTeam[1]; }
+      else {
+        const sorted = [...game.players].sort((a,b) => {
+          const diff = scores[a.id]-scores[b.id];
+          if (diff !== 0) return diff;
+          return (game.holes[h-1][a.id]||hole.par) - (game.holes[h-1][b.id]||hole.par);
+        });
+        teamA = [sorted[0].id, sorted[3].id];
+        teamB = [sorted[1].id, sorted[2].id];
+      }
+      const scA = teamA.map(id=>scores[id]).sort((a,b)=>a-b);
+      const scB = teamB.map(id=>scores[id]).sort((a,b)=>a-b);
+      const hA = scA[0]; const hB = scB[0]; // high digit = first (low score)
+      if (hA !== hB) {
+        carry = Math.max(0, carry - (Math.min(carry+1, 3) - 1));
+      } else { carry++; }
+
+      // Get current LV team colors for display
+      if (h === game.currentHole) {
+        const pmap = {};
+        game.players.forEach((p,pi) => { pmap[p.id] = { name: p.name, color: PC[pi%4] }; });
+        const aN = teamA.map(id => `<span style="color:${pmap[id]?.color||'#fff'};font-weight:700">${pmap[id]?.name||id}</span>`).join('+');
+        const bN = teamB.map(id => `<span style="color:${pmap[id]?.color||'#fff'};font-weight:700">${pmap[id]?.name||id}</span>`).join('+');
+        parts.push(`<span style="color:#aaa;font-size:12px">LV配對 </span>${aN}<span style="color:#555">vs</span>${bN}<span style="color:#aaa;font-size:12px"> 保留</span><span style="color:#f0c040;font-weight:700">${carry}洞</span>`);
+      }
+    }
+  }
+
+  bar.innerHTML = parts.join('<span style="color:#333;margin:0 10px">·</span>');
 }
 
 function prevHole() {
@@ -1378,11 +1505,14 @@ function calcLvResults() {
     const birdieB = teamB.filter(id => (game.holes[h][id]||hole.par) - hole.par === -1).length;
 
     function flipNum(n) {
-      const d1 = Math.floor(n / 10), d2 = n % 10;
-      return d2 * 10 + d1;
+      const lo = Math.floor(n / 10); // was the low digit (tens place)
+      const hi = n % 10;             // was the high digit (ones place)
+      // If both digits equal (e.g. 55, 66), add 1 to ones digit after flip
+      if (lo === hi) return hi * 10 + (lo + 1);
+      return hi * 10 + lo;
     }
 
-    let lvA = scoresA[0] * 10 + scoresA[1];
+    let lvA = scoresA[0] * 10 + scoresA[1]; // low digit first
     let lvB = scoresB[0] * 10 + scoresB[1];
     let multiplier = 1;
 
@@ -1397,17 +1527,20 @@ function calcLvResults() {
       lvB = flipNum(lvB);
     }
 
-    const holePts = Math.abs(lvA - lvB);
+    // Compare HIGH digit (tens place) only
+    const highA = Math.floor(lvA / 10);
+    const highB = Math.floor(lvB / 10);
+    const holePts = Math.abs(highA - highB);
 
-    if (lvA !== lvB) {
+    if (highA !== highB) {
       // Winner claims up to 3x carry (current hole counts as 1)
-      const totalCarry = carry + 1;           // total pending incl. this hole
-      const claimable = Math.min(totalCarry, 3); // max 3 multiplier
-      const remaining = totalCarry - claimable;  // leftover continues to carry
+      const totalCarry = carry + 1;
+      const claimable = Math.min(totalCarry, 3);
+      const remaining = totalCarry - claimable;
 
       const wonPts = holePts * claimable * multiplier;
 
-      if (lvA < lvB) {
+      if (highA < highB) {
         teamA.forEach(id => { pts[id] += wonPts; });
         teamB.forEach(id => { pts[id] -= wonPts; });
       } else {
@@ -1417,15 +1550,15 @@ function calcLvResults() {
 
       carry = remaining;
       teamLog.push({
-        hole: h+1, teamA, teamB, lvA, lvB,
+        hole: h+1, teamA, teamB, lvA, lvB, highA, highB,
         holePts, claimable, multiplier, wonPts,
-        carry, winner: lvA < lvB ? 'A' : 'B'
+        carry, winner: highA < highB ? 'A' : 'B'
       });
     } else {
-      // Tied — carry over
+      // Tied high digit — carry over
       carry++;
       teamLog.push({
-        hole: h+1, teamA, teamB, lvA, lvB,
+        hole: h+1, teamA, teamB, lvA, lvB, highA, highB,
         holePts: 0, claimable: 0, multiplier, wonPts: 0,
         carry, winner: null
       });
@@ -1578,7 +1711,7 @@ function endGame() {
         vsLines += `<div style="font-size:11px;color:${net>0?'var(--green)':net<0?'var(--red)':'var(--muted)'}">vs ${op.name}：${w}勝${l}負 ${net>0?'+':''}${net}點${capNote}</div>`;
       });
       html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-        ${playerAvatar(pi)}
+        ${playerAvatar(pi, p.name)}
         <div style="flex:1">${vsLines}</div>
         <div style="text-align:right">
           <div style="font-size:15px;font-weight:800;color:${PC[pi%4]}">${pts>0?'+':''}${pts}pt</div>
@@ -1613,7 +1746,7 @@ function endGame() {
 
     let haHtml = `<div class="card"><div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px">差點調整（比洞）</div>`;
     game.players.forEach((p,pi) => {
-      haHtml += `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">${playerAvatar(pi)}<span style="font-size:13px;font-weight:600;flex:1">${p.name}</span><span style="font-size:11px;color:var(--muted)">${hcpChanges[p.id].map(c=>`vs ${c.vs}: ${c.old}→${c.newV}`).join(' · ')}</span></div>`;
+      haHtml += `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">${playerAvatar(pi, p.name)}<span style="font-size:13px;font-weight:600;flex:1">${p.name}</span><span style="font-size:11px;color:var(--muted)">${hcpChanges[p.id].map(c=>`vs ${c.vs}: ${c.old}→${c.newV}`).join(' · ')}</span></div>`;
     });
     haHtml += `<div style="font-size:11px;color:var(--muted);margin-top:6px">每3洞勝差調整1洞差點</div></div>`;
     html += haHtml;
@@ -1629,7 +1762,7 @@ function endGame() {
       const pts = skinPts[p.id];
       const money = pts * game.skinAmount;
       html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-        ${playerAvatar(pi)}<span style="flex:1;font-weight:600">${p.name}</span>
+        ${playerAvatar(pi, p.name)}<span style="flex:1;font-weight:600">${p.name}</span>
         <span style="font-size:15px;font-weight:800;color:${PC[pi%4]}">${pts>0?'+':''}${pts}pt</span>
         <span style="font-size:13px;font-weight:700;color:${money>=0?'var(--green)':'var(--red)'};min-width:70px;text-align:right">${money>=0?'+':''}$${money}</span>
       </div>`;
@@ -1654,7 +1787,7 @@ function endGame() {
       const pts = lvPts[p.id];
       const money = pts * game.lvAmount;
       html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-        ${playerAvatar(pi)}<span style="flex:1;font-weight:600">${p.name}</span>
+        ${playerAvatar(pi, p.name)}<span style="flex:1;font-weight:600">${p.name}</span>
         <span style="font-size:15px;font-weight:800;color:${PC[pi%4]}">${pts>0?'+':''}${pts}pt</span>
         <span style="font-size:13px;font-weight:700;color:${money>=0?'var(--green)':'var(--red)'};min-width:70px;text-align:right">${money>=0?'+':''}$${money}</span>
       </div>`;
@@ -1685,7 +1818,7 @@ function endGame() {
     game.players.forEach((p,pi) => {
       const money = grandTotal[p.id];
       html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-        ${playerAvatar(pi)}<span style="flex:1;font-weight:700;font-size:15px">${p.name}</span>
+        ${playerAvatar(pi, p.name)}<span style="flex:1;font-weight:700;font-size:15px">${p.name}</span>
         <span style="font-size:18px;font-weight:800;color:${money>=0?'var(--green)':'var(--red)'}">${money>=0?'+':''}$${money}</span>
       </div>`;
     });
@@ -1757,18 +1890,26 @@ function saveAndHome() {
     date: game.date,
     courseName: game.course.name,
     courseId: game.courseId,
-    courseHoles: game.course.holes,   // save hole par/hcp for display
+    courseHoles: game.course.holes,
     playerIds: game.playerIds,
     playerNames: game.players.map(p => p.name),
+    formats: game.formats,
+    // Match play
     amount: game.amount,
     maxLoss: game.maxLoss || 0,
     totals,
-    pairNets,         // capped net per pair
-    pairWins,         // hole-win counts per pair
+    pairNets,
+    pairWins,
     hcpMatrix: game.hcpMatrix,
     skipPairs: game.skipPairs,
-    holeScores,       // full 18-hole strokes
-    holePoints        // full 18-hole points
+    holeScores,
+    holePoints,
+    // Skin
+    skinAmount: game.skinAmount,
+    skinResults: game.formats?.skin ? (() => { const r = calcSkinResults(); return { pts: r.pts, holeLog: r.holeLog }; })() : null,
+    // Las Vegas
+    lvAmount: game.lvAmount,
+    lvResults: game.formats?.lv ? (() => { const r = calcLvResults(); return { pts: r.pts, teamLog: r.teamLog }; })() : null,
   });
   DB.rounds = rounds;
 
@@ -1795,7 +1936,7 @@ function renderPlayers() {
     const sub = hcpLines.length ? hcpLines.join('・') : '尚未設定差點';
     return `
     <div class="list-item" onclick="openEditPlayer('${p.id}')">
-      <div style="width:36px;height:36px;border-radius:50%;background:${PC[i%4]}22;color:${PC[i%4]};display:flex;align-items:center;justify-content:center;font-weight:700;margin-right:12px;flex-shrink:0">${PE[i%4]}</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:${PC[i%4]}22;color:${PC[i%4]};display:flex;align-items:center;justify-content:center;font-weight:700;margin-right:12px;flex-shrink:0">${p.name}</div>
       <div class="list-item-main">
         <div class="list-item-title">${p.name}</div>
         <div class="list-item-sub" style="font-size:11px">${sub}</div>
@@ -1902,14 +2043,57 @@ function deletePlayer() {
 function renderCourses() {
   const courses = DB.courses;
   const list = document.getElementById('courses-list');
-  list.innerHTML = courses.map(c => `
-    <div class="list-item" onclick="openEditCourse('${c.id}')">
-      <div class="list-item-main">
-        <div class="list-item-title">⛳ ${c.name}</div>
-        <div class="list-item-sub">${c.region}・18洞・Par ${c.holes.reduce((s,h)=>s+h.par,0)}</div>
+
+  // Update datalist with existing countries
+  const countries = [...new Set(courses.map(c => c.country || '台灣'))];
+  const dl = document.getElementById('country-list');
+  if (dl) dl.innerHTML = countries.map(c => `<option value="${c}">`).join('');
+
+  // Group by country
+  const grouped = {};
+  courses.forEach(c => {
+    const country = c.country || '台灣';
+    if (!grouped[country]) grouped[country] = [];
+    grouped[country].push(c);
+  });
+
+  // Sort: 台灣 first, then alphabetical
+  const sortedCountries = Object.keys(grouped).sort((a,b) => {
+    if (a==='台灣') return -1; if (b==='台灣') return 1;
+    return a.localeCompare(b);
+  });
+
+  list.innerHTML = sortedCountries.map(country => {
+    const isDefault = country === '台灣';
+    const cId = `country-${country.replace(/\s/g,'_')}`;
+    const courseItems = grouped[country].map(c => `
+      <div class="list-item" onclick="openEditCourse('${c.id}')" style="padding-left:16px">
+        <div class="list-item-main">
+          <div class="list-item-title" style="font-size:15px">⛳ ${c.name}</div>
+          <div class="list-item-sub">Par ${c.holes.reduce((s,h)=>s+h.par,0)}・18洞</div>
+        </div>
+        <div class="list-item-action">›</div>
+      </div>`).join('');
+
+    return `<div class="card" style="padding:0;overflow:hidden;margin-bottom:10px">
+      <div onclick="toggleCountry('${cId}')" style="display:flex;align-items:center;padding:14px 16px;cursor:pointer;background:var(--green-pale)">
+        <span style="font-size:16px;margin-right:8px">🌏</span>
+        <span style="font-size:16px;font-weight:700;flex:1;color:var(--green)">${country}</span>
+        <span style="color:var(--muted);font-size:13px">${grouped[country].length}個球場</span>
+        <span id="${cId}-arrow" style="color:var(--muted);font-size:18px;margin-left:8px">${isDefault?'▾':'▸'}</span>
       </div>
-      <div class="list-item-action">›</div>
-    </div>`).join('');
+      <div id="${cId}" style="display:${isDefault?'block':'none'}">${courseItems}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCountry(id) {
+  const el = document.getElementById(id);
+  const arrow = document.getElementById(id+'-arrow');
+  if (!el) return;
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.textContent = open ? '▸' : '▾';
 }
 
 function buildHolesUI(holes) {
@@ -1931,7 +2115,7 @@ function buildHolesUI(holes) {
 
 function openAddCourse() {
   document.getElementById('co-name').value = '';
-  document.getElementById('co-region').value = '';
+  document.getElementById('co-country').value = '台灣';
   document.getElementById('co-id').value = '';
   document.getElementById('del-course-btn').style.display = 'none';
   const blank = Array.from({length:18},(_,i)=>({par:4,hcp:i+1,yards:380}));
@@ -1943,7 +2127,7 @@ function openEditCourse(id) {
   const c = DB.courses.find(x => x.id === id);
   if (!c) return;
   document.getElementById('co-name').value = c.name;
-  document.getElementById('co-region').value = c.region;
+  document.getElementById('co-country').value = c.country || '台灣';
   document.getElementById('co-id').value = c.id;
   document.getElementById('del-course-btn').style.display = 'block';
   document.getElementById('co-holes-setup').innerHTML = buildHolesUI(c.holes);
@@ -1953,7 +2137,7 @@ function openEditCourse(id) {
 function saveCourse() {
   const name = document.getElementById('co-name').value.trim();
   if (!name) { toast('請輸入球場名稱'); return; }
-  const region = document.getElementById('co-region').value.trim();
+  const country = document.getElementById('co-country').value.trim() || '台灣';
   const id = document.getElementById('co-id').value;
   const holes = Array.from({length:18},(_,i)=>({
     n: i+1,
@@ -1964,9 +2148,9 @@ function saveCourse() {
   const courses = DB.courses;
   if (id) {
     const c = courses.find(x => x.id === id);
-    if (c) { c.name = name; c.region = region; c.holes = holes; }
+    if (c) { c.name = name; c.country = country; c.holes = holes; }
   } else {
-    courses.push({ id: 'co'+Date.now(), name, region, holes });
+    courses.push({ id: 'co'+Date.now(), name, country, holes });
   }
   DB.courses = courses;
   closeModal('modal-course');
@@ -2138,7 +2322,47 @@ function showRoundDetail(id) {
     html += `</tr></table></div></div>`;
   }
 
-  document.getElementById('modal-rd-content').innerHTML = html;
+  // Skin results
+  if (r.skinResults) {
+    const { pts: skinPts, holeLog } = r.skinResults;
+    html += `<div class="card" style="margin-bottom:10px"><div class="card-title">🦊 Skin 結果・每點$${r.skinAmount||0}</div>`;
+    r.playerNames.forEach((n,i) => {
+      const pid = r.playerIds[i];
+      const pts = skinPts[pid] || 0;
+      const money = pts * (r.skinAmount||0);
+      html += `<div class="summary-row"><span class="label">${n}</span><span class="val ${pts>0?'pos':pts<0?'neg':'neu'}">${pts>0?'+':''}${pts}點・${money>=0?'+':''}$${money}</span></div>`;
+    });
+    if (holeLog) {
+      html += `<div style="margin-top:8px;font-size:13px;color:var(--muted);font-weight:600">洞況記錄</div>`;
+      holeLog.forEach(l => {
+        html += `<div style="font-size:13px;padding:3px 0;color:${l.winner?'var(--green)':'var(--muted)'}">第${l.hole}洞：${l.winner?`${l.winner}贏${l.claimed}洞${l.bonus>0?`+Bonus${l.bonus}`:''}${l.carry>0?`（剩${l.carry}保留）`:''}`:`和局（累積${l.carry}洞）`}</div>`;
+      });
+    }
+    html += '</div>';
+  }
+
+  // LV results
+  if (r.lvResults) {
+    const { pts: lvPts, teamLog } = r.lvResults;
+    html += `<div class="card" style="margin-bottom:10px"><div class="card-title">🎰 Las Vegas 結果・每點$${r.lvAmount||0}</div>`;
+    r.playerNames.forEach((n,i) => {
+      const pid = r.playerIds[i];
+      const pts = lvPts[pid] || 0;
+      const money = pts * (r.lvAmount||0);
+      html += `<div class="summary-row"><span class="label">${n}</span><span class="val ${pts>0?'pos':pts<0?'neg':'neu'}">${pts>0?'+':''}${pts}點・${money>=0?'+':''}$${money}</span></div>`;
+    });
+    if (teamLog) {
+      html += `<div style="margin-top:8px;font-size:13px;color:var(--muted);font-weight:600">各洞記錄</div>`;
+      const pmap2 = {};
+      r.playerIds.forEach((pid,i) => { pmap2[pid] = r.playerNames[i]; });
+      teamLog.forEach(l => {
+        const aN = l.teamA.map(id=>pmap2[id]||id).join('+');
+        const bN = l.teamB.map(id=>pmap2[id]||id).join('+');
+        html += `<div style="font-size:12px;padding:2px 0;color:${l.winner?'var(--green)':'var(--muted)'}">第${l.hole}洞 [${aN}]${l.lvA} vs [${bN}]${l.lvB}：${l.winner?`${l.winner==='A'?aN:bN} 贏${l.wonPts}pt（×${l.claimable}）`:'和局'}</div>`;
+      });
+    }
+    html += '</div>';
+  }
   document.getElementById('modal-round-detail').classList.add('open');
 }
 
@@ -2171,7 +2395,7 @@ function renderHistStats() {
     if (myRounds.length === 0) {
       html += `<div class="card">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-          <div style="width:40px;height:40px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800">${PE[pi%4]}</div>
+          <div style="width:40px;height:40px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800">${p.name}</div>
           <div><div style="font-size:16px;font-weight:700">${p.name}</div><div style="font-size:12px;color:var(--muted)">此區間無賽局紀錄</div></div>
         </div></div>`;
       return;
@@ -2210,7 +2434,7 @@ function renderHistStats() {
 
     html += `<div class="card">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <div style="width:40px;height:40px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800">${PE[pi%4]}</div>
+        <div style="width:40px;height:40px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800">${p.name}</div>
         <div><div style="font-size:16px;font-weight:700">${p.name}</div><div style="font-size:12px;color:var(--muted)">${myRounds.length} 場</div></div>
       </div>
       <div class="stat-grid" style="margin-bottom:10px">
