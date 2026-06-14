@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="高爾夫比洞賽">
@@ -27,7 +27,7 @@
     --safe-bot: env(safe-area-inset-bottom, 0px);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { font-family: -apple-system, 'Helvetica Neue', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 430px; margin: 0 auto; font-size: 17px; }
+  body { font-family: -apple-system, 'Helvetica Neue', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 430px; margin: 0 auto; font-size: 16px; }
   
   .screen { display: none; min-height: 100vh; flex-direction: column; }
   .screen.active { display: flex; }
@@ -38,16 +38,16 @@
     padding: calc(var(--safe-top) + 14px) 16px 14px;
     display: flex; align-items: center; gap: 12px;
   }
-  .topbar h1 { font-size: 20px; font-weight: 700; flex: 1; }
-  .topbar .back { font-size: 26px; cursor: pointer; padding: 0 4px; }
-  .topbar .action { font-size: 16px; font-weight: 600; background: rgba(255,255,255,0.2); padding: 7px 14px; border-radius: 20px; cursor: pointer; border: none; color: #fff; }
+  .topbar h1 { font-size: 19px; font-weight: 700; flex: 1; }
+  .topbar .back { font-size: 24px; cursor: pointer; padding: 0 4px; }
+  .topbar .action { font-size: 15px; font-weight: 600; background: rgba(255,255,255,0.2); padding: 7px 14px; border-radius: 20px; cursor: pointer; border: none; color: #fff; }
 
   .content { flex: 1; padding: 16px; overflow-y: auto; padding-bottom: calc(var(--safe-bot) + 80px); }
 
   .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
-  .card-title { font-size: 15px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .card-title { font-size: 14px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
 
-  .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; text-align: center; }
+  .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 17px; font-weight: 600; cursor: pointer; text-align: center; }
   .btn-primary { background: var(--green); color: #fff; }
   .btn-secondary { background: var(--green-pale); color: var(--green); border: 1.5px solid var(--green); }
   .btn-danger { background: #fdecea; color: var(--red); }
@@ -56,10 +56,10 @@
   .btn:active { opacity: 0.8; transform: scale(0.98); }
 
   .input-group { margin-bottom: 14px; }
-  .input-group label { font-size: 15px; color: var(--muted); font-weight: 600; display: block; margin-bottom: 6px; }
+  .input-group label { font-size: 14px; color: var(--muted); font-weight: 600; display: block; margin-bottom: 6px; }
   .input-group input, .input-group select {
     width: 100%; padding: 13px 14px; border: 1.5px solid var(--border); border-radius: 10px;
-    font-size: 17px; background: var(--bg); color: var(--text); appearance: none;
+    font-size: 16px; background: var(--bg); color: var(--text); appearance: none;
   }
   .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--green); background: #fff; }
 
@@ -68,12 +68,12 @@
   }
   .list-item:last-child { border-bottom: none; }
   .list-item-main { flex: 1; }
-  .list-item-title { font-size: 17px; font-weight: 600; }
-  .list-item-sub { font-size: 14px; color: var(--muted); margin-top: 2px; }
-  .list-item-action { color: var(--muted); font-size: 22px; }
-  .list-item-badge { background: var(--green-pale); color: var(--green); font-size: 13px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-right: 8px; }
+  .list-item-title { font-size: 16px; font-weight: 600; }
+  .list-item-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .list-item-action { color: var(--muted); font-size: 21px; }
+  .list-item-badge { background: var(--green-pale); color: var(--green); font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-right: 8px; }
 
-  .badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 12px; font-weight: 700; }
   .badge-green { background: var(--green-pale); color: var(--green); }
   .badge-gold { background: #fef9e7; color: var(--gold); }
   .badge-red { background: #fdecea; color: var(--red); }
@@ -82,8 +82,8 @@
   /* Home screen */
   .home-logo { text-align: center; padding: 40px 0 20px; }
   .home-logo .icon { font-size: 64px; margin-bottom: 8px; }
-  .home-logo h1 { font-size: 28px; font-weight: 800; color: var(--green); }
-  .home-logo p { font-size: 16px; color: var(--muted); margin-top: 4px; }
+  .home-logo h1 { font-size: 26px; font-weight: 800; color: var(--green); }
+  .home-logo p { font-size: 15px; color: var(--muted); margin-top: 4px; }
   .home-menu-item {
     display: flex; align-items: center; gap: 14px; padding: 16px;
     background: var(--card); border-radius: var(--radius); margin-bottom: 10px;
@@ -91,30 +91,30 @@
   }
   .home-menu-item:active { transform: scale(0.98); }
   .home-menu-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
-  .home-menu-text h3 { font-size: 16px; font-weight: 700; }
-  .home-menu-text p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .home-menu-text h3 { font-size: 15px; font-weight: 700; }
+  .home-menu-text p { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
   /* Scoring */
-  .hole-nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--green); color: #fff; }
+  .hole-nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--green); color: #fff; position: sticky; top: 0; z-index: 40; }
   .hole-nav .hole-info { text-align: center; }
-  .hole-nav .hole-num { font-size: 26px; font-weight: 800; }
-  .hole-nav .hole-detail { font-size: 14px; opacity: 0.85; }
-  .hole-nav .nav-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .hole-nav .hole-num { font-size: 24px; font-weight: 800; }
+  .hole-nav .hole-detail { font-size: 13px; opacity: 0.85; }
+  .hole-nav .nav-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 19px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .hole-nav .nav-btn:active { background: rgba(255,255,255,0.4); }
 
   .score-player { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
   .score-player-header { display: flex; align-items: center; margin-bottom: 12px; gap: 10px; }
-  .player-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
-  .score-player-name { font-size: 18px; font-weight: 700; flex: 1; }
-  .score-player-hcp { font-size: 14px; color: var(--muted); }
+  .player-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+  .score-player-name { font-size: 17px; font-weight: 700; flex: 1; }
+  .score-player-hcp { font-size: 13px; color: var(--muted); }
 
   .stroke-control { display: flex; align-items: center; justify-content: space-between; background: var(--bg); border-radius: 10px; padding: 8px 14px; }
-  .stroke-control label { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .stroke-control label { font-size: 12px; color: var(--muted); font-weight: 600; }
   .stroke-btns { display: flex; align-items: center; gap: 12px; }
-  .stroke-btn { width: 36px; height: 36px; border-radius: 50%; border: none; font-size: 22px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; background: var(--green); color: #fff; }
+  .stroke-btn { width: 36px; height: 36px; border-radius: 50%; border: none; font-size: 21px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; background: var(--green); color: #fff; }
   .stroke-btn.minus { background: var(--border); color: var(--text); }
   .stroke-btn:active { transform: scale(0.92); }
-  .stroke-val { font-size: 26px; font-weight: 800; min-width: 36px; text-align: center; }
+  .stroke-val { font-size: 24px; font-weight: 800; min-width: 36px; text-align: center; }
 
   .result-bar { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
   .result-chip { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 2px solid transparent; cursor: pointer; transition: all 0.15s; }
@@ -125,8 +125,8 @@
 
   .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
   .summary-row:last-child { border-bottom: none; }
-  .summary-row .label { font-size: 16px; color: var(--muted); }
-  .summary-row .val { font-size: 17px; font-weight: 700; }
+  .summary-row .label { font-size: 15px; color: var(--muted); }
+  .summary-row .val { font-size: 16px; font-weight: 700; }
   .val.pos { color: var(--green); }
   .val.neg { color: var(--red); }
   .val.neu { color: var(--muted); }
@@ -134,7 +134,7 @@
   /* Scorecard table */
   .sc-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: -4px -4px; }
   .sc-table { border-collapse: collapse; width: max-content; min-width: 100%; }
-  .sc-table th, .sc-table td { padding: 8px 10px; text-align: center; font-size: 13px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .sc-table th, .sc-table td { padding: 8px 10px; text-align: center; font-size: 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
   .sc-table th { background: var(--green); color: #fff; font-weight: 700; font-size: 12px; }
   .sc-table tr:nth-child(even) td { background: #f7faf7; }
   .sc-table .col-hole { font-weight: 700; background: var(--green-pale); color: var(--green); }
@@ -148,22 +148,22 @@
   /* Player stats */
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .stat-box { background: var(--bg); border-radius: 10px; padding: 12px; text-align: center; }
-  .stat-box .sv { font-size: 22px; font-weight: 800; }
-  .stat-box .sl { font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .stat-box .sv { font-size: 21px; font-weight: 800; }
+  .stat-box .sl { font-size: 13px; color: var(--muted); margin-top: 2px; }
 
   /* Modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: flex-end; justify-content: center; }
   .modal-overlay.open { display: flex; }
   .modal-box { background: var(--card); border-radius: 20px 20px 0 0; padding: 20px 20px calc(var(--safe-bot) + 20px); width: 100%; max-height: 85vh; overflow-y: auto; }
-  .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 16px; }
+  .modal-title { font-size: 19px; font-weight: 800; margin-bottom: 16px; }
   .modal-close { float: right; font-size: 24px; color: var(--muted); cursor: pointer; line-height: 1; }
 
   /* Toast */
-  .toast { position: fixed; bottom: calc(var(--safe-bot) + 20px); left: 50%; transform: translateX(-50%) translateY(80px); background: #1a2a1a; color: #fff; padding: 12px 20px; border-radius: 25px; font-size: 14px; font-weight: 600; opacity: 0; transition: all 0.3s; z-index: 200; white-space: nowrap; }
+  .toast { position: fixed; bottom: calc(var(--safe-bot) + 20px); left: 50%; transform: translateX(-50%) translateY(80px); background: #1a2a1a; color: #fff; padding: 12px 20px; border-radius: 25px; font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.3s; z-index: 200; white-space: nowrap; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   .tabs { display: flex; background: var(--bg); border-radius: 12px; padding: 3px; margin-bottom: 14px; }
-  .tab { flex: 1; padding: 9px; border: none; background: none; border-radius: 10px; font-size: 16px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .tab { flex: 1; padding: 9px; border: none; background: none; border-radius: 10px; font-size: 15px; font-weight: 600; color: var(--muted); cursor: pointer; }
   .tab.active { background: #fff; color: var(--green); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 
   .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
@@ -171,7 +171,7 @@
   .tag.deselected { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
 
   .amount-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .amount-btn { padding: 13px; border: 2px solid var(--border); border-radius: 10px; font-size: 17px; font-weight: 700; background: var(--bg); color: var(--text); cursor: pointer; text-align: center; }
+  .amount-btn { padding: 13px; border: 2px solid var(--border); border-radius: 10px; font-size: 16px; font-weight: 700; background: var(--bg); color: var(--text); cursor: pointer; text-align: center; }
   .amount-btn.selected { border-color: var(--green); background: var(--green-pale); color: var(--green); }
   .amount-btn:active { opacity: 0.8; }
 
@@ -182,15 +182,15 @@
 
   .empty-state { text-align: center; padding: 40px 20px; }
   .empty-state .ei { font-size: 48px; margin-bottom: 12px; }
-  .empty-state p { color: var(--muted); font-size: 15px; }
+  .empty-state p { color: var(--muted); font-size: 14px; }
 
   .section-divider { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 0 6px; }
 
   .player-hcp-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--border); }
   .player-hcp-row:last-child { border-bottom: none; }
-  .player-hcp-row .pname { font-size: 15px; font-weight: 600; flex: 1; }
-  .player-hcp-row .hval { font-size: 20px; font-weight: 800; color: var(--green); min-width: 36px; text-align: center; }
-  .player-hcp-row .hbtn { width: 32px; height: 32px; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; background: var(--green-pale); color: var(--green); display: flex; align-items: center; justify-content: center; }
+  .player-hcp-row .pname { font-size: 14px; font-weight: 600; flex: 1; }
+  .player-hcp-row .hval { font-size: 19px; font-weight: 800; color: var(--green); min-width: 36px; text-align: center; }
+  .player-hcp-row .hbtn { width: 32px; height: 32px; border-radius: 50%; border: none; font-size: 17px; cursor: pointer; background: var(--green-pale); color: var(--green); display: flex; align-items: center; justify-content: center; }
 
   @media (prefers-color-scheme: dark) {
     :root { --bg: #0f1a0f; --card: #1a2a1a; --text: #e8f0e8; --muted: #8aaa8a; --border: #2a3a2a; --green-pale: #1a3020; }
@@ -367,7 +367,7 @@
     <button class="nav-btn" onclick="nextHole()">›</button>
   </div>
   <!-- Live status bar -->
-  <div id="live-status" style="background:#1a3a25;padding:8px 12px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch"></div>
+  <div id="live-status" style="background:#1a3a25;padding:8px 12px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;position:sticky;top:var(--hole-nav-height,80px);z-index:39"></div>
   <div id="score-players-area" class="content" style="padding-top:10px"></div>
   <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--border);padding:12px 16px;padding-bottom:calc(var(--safe-bot)+12px);display:flex;gap:8px;z-index:50">
     <button class="btn btn-secondary" style="flex:1;padding:12px" onclick="showScorecard()">📋 計分卡</button>
@@ -1009,29 +1009,71 @@ function renderScoring() {
 
   const area = document.getElementById('score-players-area');
   let html = '';
+  const fmt = game.formats || { match: true };
+
+  // Determine LV teams for this hole (for background coloring)
+  let lvTeamA = [], lvTeamB = [];
+  if (fmt.lv) {
+    const scores = {};
+    game.players.forEach(p => { scores[p.id] = game.holes[game.currentHole][p.id] || h.par; });
+    if (game.currentHole === 0) {
+      lvTeamA = game.lvFirstTeam[0];
+      lvTeamB = game.lvFirstTeam[1];
+    } else {
+      const prevScores = {};
+      game.players.forEach(p => { prevScores[p.id] = game.holes[game.currentHole-1][p.id] || h.par; });
+      const sorted = [...game.players].sort((a,b) => {
+        const diff = scores[a.id] - scores[b.id];
+        return diff !== 0 ? diff : prevScores[a.id] - prevScores[b.id];
+      });
+      lvTeamA = [sorted[0].id, sorted[3].id];
+      lvTeamB = [sorted[1].id, sorted[2].id];
+    }
+  }
 
   game.players.forEach((p, pi) => {
     const score = game.holes[game.currentHole][p.id] || h.par;
     const scoreName = getScoreName(score, h.par);
 
-    // Show per-opponent status on THIS hole
-    const opBadges = game.players.filter(op => op.id !== p.id).map(op => {
-      if (isPairSkipped(p.id, op.id)) return `<span style="font-size:11px;color:var(--muted)">vs ${op.name}:不比</span>`;
-      const hcpVal = game.hcpMatrix[`${p.id}_${op.id}`] || 0;
-      const giver = hcpVal >= 0 ? p.id : op.id;
-      const sh = game.strokeHolesCache[`${giver}_${hcpVal>=0?op.id:p.id}`] || [];
-      const isStroke = sh[game.currentHole] === true;
-      if (!isStroke) return `<span style="font-size:11px;color:var(--muted)">vs ${op.name}:無讓</span>`;
-      const isGiver = giver === p.id;
-      return `<span style="font-size:11px;font-weight:700;color:${isGiver?'var(--red)':'var(--blue)'}">${isGiver?`讓${op.name}⬇`:`受${op.name}⬆`}</span>`;
-    }).join(' ');
+    // LV team background
+    let cardBg = 'var(--card)';
+    if (fmt.lv) {
+      if (lvTeamA.includes(p.id)) cardBg = 'var(--card)';
+      else if (lvTeamB.includes(p.id)) cardBg = '#f0f0f0';
+    }
 
-    html += `<div class="score-player">
+    // Match badges: show actual score vs opponent (no handicap pre-applied)
+    let opBadges = '';
+    if (fmt.match) {
+      opBadges = game.players.filter(op => op.id !== p.id).map(op => {
+        if (isPairSkipped(p.id, op.id)) return `<span style="font-size:11px;color:var(--muted)">vs ${op.name}:不比</span>`;
+        const myScore = game.holes[game.currentHole][p.id] || h.par;
+        const opScore = game.holes[game.currentHole][op.id] || h.par;
+        // Show stroke hole indicator
+        const hcpVal = game.hcpMatrix[`${p.id}_${op.id}`] || 0;
+        const giver = hcpVal >= 0 ? p.id : op.id;
+        const sh = game.strokeHolesCache[`${giver}_${hcpVal>=0?op.id:p.id}`] || [];
+        const isStroke = sh[game.currentHole] === true;
+        const strokeNote = isStroke ? (giver===p.id ? '⬇讓' : '⬆受') : '';
+        const color = myScore < opScore ? 'var(--green)' : myScore > opScore ? 'var(--red)' : 'var(--muted)';
+        const result = myScore < opScore ? '勝' : myScore > opScore ? '負' : '平';
+        return `<span style="font-size:11px;color:${color};font-weight:600">${strokeNote}vs ${op.name}:${result}</span>`;
+      }).join(' ');
+    }
+
+    // LV team label
+    let lvLabel = '';
+    if (fmt.lv) {
+      const inA = lvTeamA.includes(p.id);
+      lvLabel = `<span style="font-size:11px;font-weight:700;color:${inA?'var(--green)':'#888'}">${inA?'A隊':'B隊'}</span>`;
+    }
+
+    html += `<div class="score-player" style="background:${cardBg}">
       <div class="score-player-header">
         ${playerAvatar(pi, p.name)}
         <div style="flex:1">
-          <div class="score-player-name">${p.name}</div>
-          <div style="font-size:11px;margin-top:3px;line-height:1.8">${opBadges}</div>
+          <div class="score-player-name">${p.name} ${lvLabel}</div>
+          ${opBadges ? `<div style="font-size:11px;margin-top:3px;line-height:1.8">${opBadges}</div>` : ''}
         </div>
       </div>
       <div class="stroke-control">
@@ -2215,20 +2257,27 @@ function showRoundDetail(id) {
   const capNote = r.maxLoss > 0 ? `・上限${r.maxLoss}點` : '';
   document.getElementById('modal-rd-title').innerHTML = `${r.courseName} <span class="modal-close" onclick="closeModal('modal-round-detail')">×</span>`;
 
-  let html = `<div style="font-size:13px;color:var(--muted);margin-bottom:12px">${r.date}・每點$${r.amount}${capNote}</div>`;
+  let html = `<div style="font-size:13px;color:var(--muted);margin-bottom:12px">${r.date}・每點$${r.amount||0}${capNote}</div>`;
 
   // Summary totals
-  html += `<div class="card" style="margin-bottom:10px"><div class="card-title">各人合計</div>`;
-  r.playerNames.forEach((n,i) => {
-    const pid = r.playerIds[i];
-    const pts = r.totals[pid] || 0;
-    const money = pts * r.amount;
-    html += `<div class="summary-row">
-      <span class="label" style="font-weight:600">${n}</span>
-      <span class="val ${pts>0?'pos':pts<0?'neg':'neu'}">${pts>0?'+':''}${pts}點・${money>=0?'+':''}$${money}</span>
-    </div>`;
-  });
-  html += '</div>';
+  if (r.totals && r.playerNames) {
+    html += `<div class="card" style="margin-bottom:10px"><div class="card-title">各人合計</div>`;
+    r.playerNames.forEach((n,i) => {
+      const pid = r.playerIds[i];
+      const pts = (r.totals && r.totals[pid]) || 0;
+      const money = pts * (r.amount||0);
+      html += `<div class="summary-row">
+        <span class="label" style="font-weight:600">${n}</span>
+        <span class="val ${pts>0?'pos':pts<0?'neg':'neu'}">${pts>0?'+':''}${pts}點・${money>=0?'+':''}$${money}</span>
+      </div>`;
+    });
+    html += '</div>';
+  } else if (r.playerNames) {
+    // Old format fallback
+    html += `<div class="card" style="margin-bottom:10px"><div class="card-title">參賽球員</div>`;
+    r.playerNames.forEach(n => { html += `<div class="summary-row"><span class="label">${n}</span></div>`; });
+    html += '</div>';
+  }
 
   // Pairwise results
   if (r.pairNets) {
@@ -2363,6 +2412,8 @@ function showRoundDetail(id) {
     }
     html += '</div>';
   }
+
+  document.getElementById('modal-rd-content').innerHTML = html;
   document.getElementById('modal-round-detail').classList.add('open');
 }
 
