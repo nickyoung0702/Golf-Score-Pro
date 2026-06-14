@@ -1,0 +1,2235 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="高爾夫比洞賽">
+<title>高爾夫比洞賽計分</title>
+<style>
+  :root {
+    --green: #1a6b3a;
+    --green-light: #2d8a50;
+    --green-pale: #e8f5ed;
+    --gold: #c8971a;
+    --gold-light: #f0c040;
+    --bg: #f4f6f2;
+    --card: #ffffff;
+    --text: #1a2a1a;
+    --muted: #6b7c6b;
+    --border: #d0ddd0;
+    --red: #c0392b;
+    --blue: #1565c0;
+    --shadow: 0 2px 8px rgba(0,0,0,0.10);
+    --radius: 14px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bot: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, 'Helvetica Neue', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 430px; margin: 0 auto; }
+  
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+  
+  .topbar {
+    background: var(--green);
+    color: #fff;
+    padding: calc(var(--safe-top) + 14px) 16px 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .topbar h1 { font-size: 18px; font-weight: 700; flex: 1; }
+  .topbar .back { font-size: 24px; cursor: pointer; padding: 0 4px; }
+  .topbar .action { font-size: 14px; font-weight: 600; background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; cursor: pointer; border: none; color: #fff; }
+
+  .content { flex: 1; padding: 16px; overflow-y: auto; padding-bottom: calc(var(--safe-bot) + 80px); }
+
+  .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
+  .card-title { font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+
+  .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; text-align: center; }
+  .btn-primary { background: var(--green); color: #fff; }
+  .btn-secondary { background: var(--green-pale); color: var(--green); border: 1.5px solid var(--green); }
+  .btn-danger { background: #fdecea; color: var(--red); }
+  .btn-gold { background: var(--gold); color: #fff; }
+  .btn + .btn { margin-top: 10px; }
+  .btn:active { opacity: 0.8; transform: scale(0.98); }
+
+  .input-group { margin-bottom: 14px; }
+  .input-group label { font-size: 13px; color: var(--muted); font-weight: 600; display: block; margin-bottom: 6px; }
+  .input-group input, .input-group select {
+    width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 16px; background: var(--bg); color: var(--text); appearance: none;
+  }
+  .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--green); background: #fff; }
+
+  .list-item {
+    display: flex; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+  }
+  .list-item:last-child { border-bottom: none; }
+  .list-item-main { flex: 1; }
+  .list-item-title { font-size: 16px; font-weight: 600; }
+  .list-item-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .list-item-action { color: var(--muted); font-size: 20px; }
+  .list-item-badge { background: var(--green-pale); color: var(--green); font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-right: 8px; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+  .badge-green { background: var(--green-pale); color: var(--green); }
+  .badge-gold { background: #fef9e7; color: var(--gold); }
+  .badge-red { background: #fdecea; color: var(--red); }
+  .badge-blue { background: #e3f2fd; color: var(--blue); }
+
+  /* Home screen */
+  .home-logo { text-align: center; padding: 40px 0 20px; }
+  .home-logo .icon { font-size: 64px; margin-bottom: 8px; }
+  .home-logo h1 { font-size: 26px; font-weight: 800; color: var(--green); }
+  .home-logo p { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .home-menu-item {
+    display: flex; align-items: center; gap: 14px; padding: 16px;
+    background: var(--card); border-radius: var(--radius); margin-bottom: 10px;
+    box-shadow: var(--shadow); cursor: pointer;
+  }
+  .home-menu-item:active { transform: scale(0.98); }
+  .home-menu-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+  .home-menu-text h3 { font-size: 16px; font-weight: 700; }
+  .home-menu-text p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* Scoring */
+  .hole-nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--green); color: #fff; }
+  .hole-nav .hole-info { text-align: center; }
+  .hole-nav .hole-num { font-size: 24px; font-weight: 800; }
+  .hole-nav .hole-detail { font-size: 12px; opacity: 0.85; }
+  .hole-nav .nav-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .hole-nav .nav-btn:active { background: rgba(255,255,255,0.4); }
+
+  .score-player { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
+  .score-player-header { display: flex; align-items: center; margin-bottom: 12px; gap: 10px; }
+  .player-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+  .score-player-name { font-size: 16px; font-weight: 700; flex: 1; }
+  .score-player-hcp { font-size: 12px; color: var(--muted); }
+
+  .stroke-control { display: flex; align-items: center; justify-content: space-between; background: var(--bg); border-radius: 10px; padding: 8px 14px; }
+  .stroke-control label { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .stroke-btns { display: flex; align-items: center; gap: 12px; }
+  .stroke-btn { width: 36px; height: 36px; border-radius: 50%; border: none; font-size: 22px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; background: var(--green); color: #fff; }
+  .stroke-btn.minus { background: var(--border); color: var(--text); }
+  .stroke-btn:active { transform: scale(0.92); }
+  .stroke-val { font-size: 26px; font-weight: 800; min-width: 36px; text-align: center; }
+
+  .result-bar { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .result-chip { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 2px solid transparent; cursor: pointer; transition: all 0.15s; }
+  .result-chip.selected-win { background: var(--green); color: #fff; }
+  .result-chip.selected-loss { background: var(--red); color: #fff; }
+  .result-chip.selected-tie { background: var(--gold); color: #fff; }
+  .result-chip.neutral { background: var(--bg); color: var(--muted); border-color: var(--border); }
+
+  .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .label { font-size: 14px; color: var(--muted); }
+  .summary-row .val { font-size: 15px; font-weight: 700; }
+  .val.pos { color: var(--green); }
+  .val.neg { color: var(--red); }
+  .val.neu { color: var(--muted); }
+
+  /* Scorecard table */
+  .sc-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: -4px -4px; }
+  .sc-table { border-collapse: collapse; width: max-content; min-width: 100%; }
+  .sc-table th, .sc-table td { padding: 8px 10px; text-align: center; font-size: 13px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .sc-table th { background: var(--green); color: #fff; font-weight: 700; font-size: 12px; }
+  .sc-table tr:nth-child(even) td { background: #f7faf7; }
+  .sc-table .col-hole { font-weight: 700; background: var(--green-pale); color: var(--green); }
+  .sc-table .birdie { color: var(--blue); font-weight: 700; }
+  .sc-table .eagle { color: var(--gold); font-weight: 800; }
+  .sc-table .bogey { color: var(--red); }
+  .sc-table .par { color: var(--muted); }
+  .sc-table .win { color: var(--green); font-weight: 700; }
+  .sc-table .loss { color: var(--red); font-weight: 700; }
+
+  /* Player stats */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-box { background: var(--bg); border-radius: 10px; padding: 12px; text-align: center; }
+  .stat-box .sv { font-size: 22px; font-weight: 800; }
+  .stat-box .sl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: var(--card); border-radius: 20px 20px 0 0; padding: 20px 20px calc(var(--safe-bot) + 20px); width: 100%; max-height: 85vh; overflow-y: auto; }
+  .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+  .modal-close { float: right; font-size: 24px; color: var(--muted); cursor: pointer; line-height: 1; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: calc(var(--safe-bot) + 20px); left: 50%; transform: translateX(-50%) translateY(80px); background: #1a2a1a; color: #fff; padding: 12px 20px; border-radius: 25px; font-size: 14px; font-weight: 600; opacity: 0; transition: all 0.3s; z-index: 200; white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .tabs { display: flex; background: var(--bg); border-radius: 12px; padding: 3px; margin-bottom: 14px; }
+  .tab { flex: 1; padding: 8px; border: none; background: none; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .tab.active { background: #fff; color: var(--green); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .tag { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; background: var(--green-pale); color: var(--green); }
+  .tag.deselected { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+
+  .amount-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .amount-btn { padding: 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 15px; font-weight: 700; background: var(--bg); color: var(--text); cursor: pointer; text-align: center; }
+  .amount-btn.selected { border-color: var(--green); background: var(--green-pale); color: var(--green); }
+  .amount-btn:active { opacity: 0.8; }
+
+  .progress-bar { height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+  .progress-fill { height: 100%; background: var(--gold-light); border-radius: 2px; transition: width 0.3s; }
+
+  .handicap-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 10px; font-size: 12px; }
+
+  .empty-state { text-align: center; padding: 40px 20px; }
+  .empty-state .ei { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { color: var(--muted); font-size: 15px; }
+
+  .section-divider { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 0 6px; }
+
+  .player-hcp-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .player-hcp-row:last-child { border-bottom: none; }
+  .player-hcp-row .pname { font-size: 15px; font-weight: 600; flex: 1; }
+  .player-hcp-row .hval { font-size: 20px; font-weight: 800; color: var(--green); min-width: 36px; text-align: center; }
+  .player-hcp-row .hbtn { width: 32px; height: 32px; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; background: var(--green-pale); color: var(--green); display: flex; align-items: center; justify-content: center; }
+
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1a0f; --card: #1a2a1a; --text: #e8f0e8; --muted: #8aaa8a; --border: #2a3a2a; --green-pale: #1a3020; }
+    .home-logo h1 { color: #4caf70; }
+    .sc-table tr:nth-child(even) td { background: #1f2f1f; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="screen-home" class="screen active">
+  <div class="topbar">
+    <div style="font-size:28px">⛳</div>
+    <h1>高爾夫比洞賽</h1>
+    <div style="font-size:12px;opacity:0.7">Taiwan</div>
+  </div>
+  <div class="content">
+    <div class="home-logo">
+      <div class="icon">🏌️</div>
+      <h1>比洞賽計分</h1>
+      <p>Match Play · 賭資計算</p>
+    </div>
+    <div class="home-menu-item" onclick="showScreen('screen-newgame')">
+      <div class="home-menu-icon" style="background:#e8f5ed">🎯</div>
+      <div class="home-menu-text"><h3>開新局</h3><p>選球場、選球員、設定賭金</p></div>
+      <div style="color:var(--muted)">›</div>
+    </div>
+    <div class="home-menu-item" onclick="showScreen('screen-history')">
+      <div class="home-menu-icon" style="background:#fef9e7">📊</div>
+      <div class="home-menu-text"><h3>歷史紀錄</h3><p>查詢過往賽局及統計</p></div>
+      <div style="color:var(--muted)">›</div>
+    </div>
+    <div class="home-menu-item" onclick="showScreen('screen-players')">
+      <div class="home-menu-icon" style="background:#e3f2fd">👤</div>
+      <div class="home-menu-text"><h3>球員管理</h3><p>新增球員、查看差點</p></div>
+      <div style="color:var(--muted)">›</div>
+    </div>
+    <div class="home-menu-item" onclick="showScreen('screen-courses')">
+      <div class="home-menu-icon" style="background:#fdecea">🗺️</div>
+      <div class="home-menu-text"><h3>球場資料庫</h3><p>台灣球場計分卡</p></div>
+      <div style="color:var(--muted)">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW GAME -->
+<div id="screen-newgame" class="screen">
+  <div class="topbar">
+    <span class="back" onclick="showScreen('screen-home')">‹</span>
+    <h1>開新局</h1>
+    <button class="action" onclick="startGame()">開始</button>
+  </div>
+  <div class="content">
+    <div class="card">
+      <div class="card-title">選擇球場</div>
+      <div class="input-group" style="margin:0">
+        <select id="sel-course" onchange="onCourseChange()">
+          <option value="">請選擇球場...</option>
+        </select>
+      </div>
+      <div id="course-info" style="display:none;margin-top:12px">
+        <div id="course-info-text" style="font-size:14px;line-height:1.6;color:var(--muted)"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">選擇球員 (2-4人)</div>
+      <div id="player-select-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">選擇賽制（可複選）</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid var(--border);border-radius:10px;cursor:pointer" id="fmt-match-label">
+          <input type="checkbox" id="fmt-match" checked onchange="onFormatChange()" style="width:18px;height:18px;accent-color:var(--green)">
+          <div><div style="font-weight:700">🎯 個人比洞</div><div style="font-size:12px;color:var(--muted)">球員間各自比洞，零和計分</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid var(--border);border-radius:10px;cursor:pointer" id="fmt-skin-label">
+          <input type="checkbox" id="fmt-skin" onchange="onFormatChange()" style="width:18px;height:18px;accent-color:var(--green)">
+          <div><div style="font-weight:700">🦊 Skin</div><div style="font-size:12px;color:var(--muted)">最低桿贏洞，和局保留，上限3洞</div></div>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid var(--border);border-radius:10px;cursor:pointer" id="fmt-lv-label">
+          <input type="checkbox" id="fmt-lv" onchange="onFormatChange()" style="width:18px;height:18px;accent-color:var(--green)">
+          <div><div style="font-weight:700">🎰 Las Vegas</div><div style="font-size:12px;color:var(--muted)">雙人組合，動態配對，Low點數</div></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- 個人比洞設定 -->
+    <div id="setup-match" class="card">
+      <div class="card-title">🎯 個人比洞設定</div>
+      <div id="hcp-setup-card-inner">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px">差點設定，可選擇「不比」跳過</div>
+        <div id="hcp-matrix"></div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="card-title">每點金額</div>
+        <div class="amount-picker" id="amount-picker">
+          <div class="amount-btn selected" data-v="50" onclick="pickAmount(this)">50元</div>
+          <div class="amount-btn" data-v="100" onclick="pickAmount(this)">100元</div>
+          <div class="amount-btn" data-v="200" onclick="pickAmount(this)">200元</div>
+          <div class="amount-btn" data-v="500" onclick="pickAmount(this)">500元</div>
+        </div>
+        <div class="input-group" style="margin-top:8px"><label>自訂金額</label>
+          <input type="number" id="custom-amount" placeholder="輸入金額" inputmode="numeric">
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="card-title">每對輸贏上限（0=不限）</div>
+        <div class="amount-picker">
+          <div class="amount-btn selected" data-cap="0" onclick="pickCap(this)">不限</div>
+          <div class="amount-btn" data-cap="8" onclick="pickCap(this)">8點</div>
+          <div class="amount-btn" data-cap="10" onclick="pickCap(this)">10點</div>
+          <div class="amount-btn" data-cap="12" onclick="pickCap(this)">12點</div>
+        </div>
+        <div class="input-group" style="margin-top:8px"><label>自訂上限</label>
+          <input type="number" id="custom-cap" placeholder="0=不限" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+
+    <!-- Skin 設定 -->
+    <div id="setup-skin" class="card" style="display:none">
+      <div class="card-title">🦊 Skin 設定</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">各球員受讓洞數（依HCP難度由高到低套用）</div>
+      <div id="skin-hcp-matrix"></div>
+      <div style="margin-top:14px">
+        <div class="card-title">Skin 每點金額</div>
+        <div class="amount-picker" id="skin-amount-picker">
+          <div class="amount-btn selected" data-v="100" onclick="pickSkinAmount(this)">100元</div>
+          <div class="amount-btn" data-v="200" onclick="pickSkinAmount(this)">200元</div>
+          <div class="amount-btn" data-v="500" onclick="pickSkinAmount(this)">500元</div>
+          <div class="amount-btn" data-v="1000" onclick="pickSkinAmount(this)">1000元</div>
+        </div>
+        <div class="input-group" style="margin-top:8px"><label>自訂金額</label>
+          <input type="number" id="skin-custom-amount" placeholder="輸入金額" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+
+    <!-- Las Vegas 設定 -->
+    <div id="setup-lv" class="card" style="display:none">
+      <div class="card-title">🎰 Las Vegas 設定</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">第一洞配對（之後動態調整：最低杆與最高杆同組）</div>
+      <div id="lv-team-setup"></div>
+      <div style="margin-top:14px">
+        <div class="card-title">Las Vegas 每點金額</div>
+        <div class="amount-picker" id="lv-amount-picker">
+          <div class="amount-btn selected" data-v="100" onclick="pickLvAmount(this)">100元</div>
+          <div class="amount-btn" data-v="200" onclick="pickLvAmount(this)">200元</div>
+          <div class="amount-btn" data-v="500" onclick="pickLvAmount(this)">500元</div>
+          <div class="amount-btn" data-v="1000" onclick="pickLvAmount(this)">1000元</div>
+        </div>
+        <div class="input-group" style="margin-top:8px"><label>自訂金額</label>
+          <input type="number" id="lv-custom-amount" placeholder="輸入金額" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORING -->
+<div id="screen-scoring" class="screen">
+  <div class="hole-nav">
+    <button class="nav-btn" onclick="prevHole()">‹</button>
+    <div class="hole-info">
+      <div class="hole-num" id="hn-num">第 1 洞</div>
+      <div class="hole-detail" id="hn-detail">Par 4 · HCP 1</div>
+      <div class="progress-bar"><div class="progress-fill" id="hn-progress"></div></div>
+    </div>
+    <button class="nav-btn" onclick="nextHole()">›</button>
+  </div>
+  <div id="score-players-area" class="content" style="padding-top:10px"></div>
+  <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--border);padding:12px 16px;padding-bottom:calc(var(--safe-bot)+12px);display:flex;gap:8px;z-index:50">
+    <button class="btn btn-secondary" style="flex:1;padding:12px" onclick="showScorecard()">📋 計分卡</button>
+    <button class="btn btn-primary" style="flex:1;padding:12px" onclick="nextHole()">下一洞 ›</button>
+  </div>
+</div>
+
+<!-- SCORECARD FULL -->
+<div id="screen-scorecard" class="screen">
+  <div class="topbar">
+    <span class="back" onclick="showScreen('screen-scoring')">‹</span>
+    <h1>完整計分卡</h1>
+    <button class="action" onclick="endGame()">結束賽局</button>
+  </div>
+  <div class="content" style="padding:8px">
+    <div id="sc-totals-area" class="card" style="margin-bottom:10px"></div>
+    <div class="card" style="padding:8px">
+      <div class="sc-wrap">
+        <table class="sc-table" id="sc-main-table"><tbody></tbody></table>
+      </div>
+    </div>
+    <button class="btn btn-danger" onclick="confirmDiscard()" style="margin-top:4px">🗑️ 放棄此局不儲存</button>
+  </div>
+</div>
+
+<!-- GAME RESULT -->
+<div id="screen-result" class="screen">
+  <div class="topbar">
+    <h1>🏆 賽局結果</h1>
+    <button class="action" onclick="saveAndHome()">儲存並回首頁</button>
+  </div>
+  <div class="content">
+    <div id="result-players"></div>
+    <div class="card">
+      <div class="card-title">差點調整</div>
+      <div id="result-hcp-adj"></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px">原則：每對之間，勝方每3點差調整1洞差點</div>
+    </div>
+    <div class="card">
+      <div class="card-title">賽局日期</div>
+      <div id="result-date" style="font-size:15px;font-weight:600"></div>
+    </div>
+    <button class="btn btn-danger" onclick="confirmDiscard()" style="margin-top:4px">🗑️ 放棄不儲存</button>
+  </div>
+</div>
+
+<!-- PLAYERS MANAGEMENT -->
+<div id="screen-players" class="screen">
+  <div class="topbar">
+    <span class="back" onclick="showScreen('screen-home')">‹</span>
+    <h1>球員管理</h1>
+    <button class="action" onclick="openAddPlayer()">+ 新增</button>
+  </div>
+  <div class="content">
+    <div id="players-list"></div>
+  </div>
+</div>
+
+<!-- COURSES -->
+<div id="screen-courses" class="screen">
+  <div class="topbar">
+    <span class="back" onclick="showScreen('screen-home')">‹</span>
+    <h1>球場資料庫</h1>
+    <button class="action" onclick="openAddCourse()">+ 新增</button>
+  </div>
+  <div class="content">
+    <div id="courses-list"></div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div id="screen-history" class="screen">
+  <div class="topbar">
+    <span class="back" onclick="showScreen('screen-home')">‹</span>
+    <h1>歷史紀錄</h1>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <button class="tab active" onclick="histTab('rounds',this)">賽局記錄</button>
+      <button class="tab" onclick="histTab('stats',this)">球員統計</button>
+    </div>
+    <div id="hist-rounds"></div>
+    <div id="hist-stats" style="display:none">
+      <div class="card" style="margin-bottom:10px">
+        <div class="card-title">日期區間篩選</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="date" id="stat-date-from" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;background:var(--bg);color:var(--text)">
+          <span style="color:var(--muted)">～</span>
+          <input type="date" id="stat-date-to" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;background:var(--bg);color:var(--text)">
+        </div>
+        <button class="btn btn-secondary" style="margin-top:10px;padding:10px" onclick="renderHistStats()">套用篩選</button>
+      </div>
+      <div id="hist-stats-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="modal-player" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title">球員資料 <span class="modal-close" onclick="closeModal('modal-player')">×</span></div>
+    <div class="input-group"><label>球員姓名</label><input id="pl-name" type="text" placeholder="請輸入姓名"></div>
+    <div class="card-title" style="margin-top:4px;margin-bottom:8px">對各球員讓洞差點（正數=讓對方）</div>
+    <div id="pl-hcp-matrix"></div>
+    <input type="hidden" id="pl-id">
+    <button class="btn btn-primary" style="margin-top:14px" onclick="savePlayer()">儲存</button>
+    <button class="btn btn-danger" id="del-player-btn" onclick="deletePlayer()" style="display:none;margin-top:8px">刪除球員</button>
+  </div>
+</div>
+
+<div id="modal-course" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title">球場資料 <span class="modal-close" onclick="closeModal('modal-course')">×</span></div>
+    <div class="input-group"><label>球場名稱</label><input id="co-name" type="text" placeholder="例：台北球場"></div>
+    <div class="input-group"><label>地區</label><input id="co-region" type="text" placeholder="例：台北市"></div>
+    <div id="co-holes-setup"></div>
+    <input type="hidden" id="co-id">
+    <button class="btn btn-primary" onclick="saveCourse()">儲存</button>
+    <button class="btn btn-danger" id="del-course-btn" onclick="deleteCourse()" style="display:none;margin-top:8px">刪除球場</button>
+  </div>
+</div>
+
+<div id="modal-round-detail" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-rd-title">賽局詳情 <span class="modal-close" onclick="closeModal('modal-round-detail')">×</span></div>
+    <div id="modal-rd-content"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ---- DATA LAYER ----
+const DB = {
+  get players() { return JSON.parse(localStorage.getItem('golf_players') || '[]'); },
+  set players(v) { localStorage.setItem('golf_players', JSON.stringify(v)); },
+  get courses() { return JSON.parse(localStorage.getItem('golf_courses') || '[]'); },
+  set courses(v) { localStorage.setItem('golf_courses', JSON.stringify(v)); },
+  get rounds() { return JSON.parse(localStorage.getItem('golf_rounds') || '[]'); },
+  set rounds(v) { localStorage.setItem('golf_rounds', JSON.stringify(v)); }
+};
+
+// ---- HANDICAP CORE ----
+// hcpMatrix[`${pidA}_${pidB}`] = N means A gives B N strokes (positive=A gives, negative=A receives)
+// skipPairs: Set of canonical keys `${minId}_${maxId}` for pairs that don't play each other
+
+// Given hcp = N strokes A gives B (N can be negative):
+// Split across 18 holes by HCP ranking: front9 holes sorted by HCP asc, back9 holes sorted by HCP asc
+// Total strokes = abs(N). Positive strokes applied to giver, negative reversed.
+// e.g. A gives B 3(front)+2(back)=5: front holes HCP1,3,5 get a stroke; back holes HCP2,4 get a stroke
+// Returns a Set of hole indices (0-based) where giver gets +1 net stroke (they give one stroke on that hole)
+
+function computeStrokeHoles(course, totalStrokes) {
+  // totalStrokes = how many strokes the GIVER gives the RECEIVER
+  // Returns array of 18 booleans: strokeHoles[i] = true means giver gives stroke on hole i
+  const strokeHoles = new Array(18).fill(false);
+  if (totalStrokes === 0) return strokeHoles;
+  
+  const absN = Math.abs(totalStrokes);
+  const sign = totalStrokes > 0 ? 1 : -1; // 1=normal giving, handled outside
+  
+  // Sort all 18 holes by HCP rank (1=hardest, 18=easiest)
+  // Front 9 = holes 0-8, Back 9 = holes 9-17
+  // Distribute: first stroke to HCP1 (globally), second to HCP2, etc.
+  const sorted = course.holes
+    .map((h, i) => ({ idx: i, hcp: h.hcp }))
+    .sort((a, b) => a.hcp - b.hcp);
+  
+  // Apply up to absN strokes starting from hardest hole
+  for (let k = 0; k < Math.min(absN, 18); k++) {
+    strokeHoles[sorted[k].idx] = true;
+  }
+  return strokeHoles;
+}
+
+// ---- BUILT-IN COURSES ----
+const DEFAULT_COURSES = [
+  {
+    id: 'tc01', name: '林口球場', region: '新北市',
+    holes: [
+      {n:1,par:4,hcp:7,yards:380},{n:2,par:3,hcp:15,yards:165},{n:3,par:5,hcp:3,yards:520},
+      {n:4,par:4,hcp:11,yards:360},{n:5,par:4,hcp:1,yards:430},{n:6,par:3,hcp:17,yards:155},
+      {n:7,par:5,hcp:5,yards:510},{n:8,par:4,hcp:13,yards:350},{n:9,par:4,hcp:9,yards:400},
+      {n:10,par:4,hcp:8,yards:390},{n:11,par:3,hcp:16,yards:175},{n:12,par:5,hcp:2,yards:530},
+      {n:13,par:4,hcp:10,yards:365},{n:14,par:4,hcp:4,yards:420},{n:15,par:3,hcp:18,yards:145},
+      {n:16,par:5,hcp:6,yards:500},{n:17,par:4,hcp:14,yards:345},{n:18,par:4,hcp:12,yards:410}
+    ]
+  },
+  {
+    id: 'tc04', name: '林口第一 阿諾球道 Blue', region: '新北市',
+    holes: [
+      {n:1, par:4, hcp:11, yards:398},
+      {n:2, par:3, hcp:9,  yards:190},
+      {n:3, par:5, hcp:5,  yards:550},
+      {n:4, par:4, hcp:7,  yards:394},
+      {n:5, par:4, hcp:3,  yards:368},
+      {n:6, par:3, hcp:15, yards:193},
+      {n:7, par:4, hcp:17, yards:370},
+      {n:8, par:4, hcp:1,  yards:468},
+      {n:9, par:5, hcp:13, yards:505},
+      {n:10,par:3, hcp:18, yards:174},
+      {n:11,par:5, hcp:2,  yards:537},
+      {n:12,par:5, hcp:8,  yards:592},
+      {n:13,par:3, hcp:12, yards:201},
+      {n:14,par:4, hcp:4,  yards:439},
+      {n:15,par:4, hcp:16, yards:355},
+      {n:16,par:5, hcp:6,  yards:534},
+      {n:17,par:3, hcp:10, yards:168},
+      {n:18,par:4, hcp:14, yards:357}
+    ]
+  },
+  {
+    id: 'tc05', name: '林口第一 帕瑪球道 Blue', region: '新北市',
+    holes: [
+      {n:1, par:5, hcp:7,  yards:504},
+      {n:2, par:4, hcp:1,  yards:425},
+      {n:3, par:3, hcp:17, yards:175},
+      {n:4, par:5, hcp:15, yards:555},
+      {n:5, par:4, hcp:5,  yards:420},
+      {n:6, par:3, hcp:13, yards:189},
+      {n:7, par:5, hcp:3,  yards:505},
+      {n:8, par:4, hcp:9,  yards:424},
+      {n:9, par:4, hcp:11, yards:377},
+      {n:10,par:3, hcp:14, yards:190},
+      {n:11,par:3, hcp:16, yards:180},
+      {n:12,par:4, hcp:12, yards:432},
+      {n:13,par:3, hcp:18, yards:150},
+      {n:14,par:4, hcp:10, yards:418},
+      {n:15,par:4, hcp:4,  yards:462},
+      {n:16,par:5, hcp:6,  yards:517},
+      {n:17,par:5, hcp:8,  yards:504},
+      {n:18,par:4, hcp:2,  yards:425}
+    ]
+  },
+  {
+    id: 'tc02', name: '大屯球場', region: '台北市',
+    holes: [
+      {n:1,par:4,hcp:5,yards:395},{n:2,par:5,hcp:1,yards:545},{n:3,par:3,hcp:13,yards:170},
+      {n:4,par:4,hcp:9,yards:375},{n:5,par:4,hcp:3,yards:440},{n:6,par:5,hcp:7,yards:515},
+      {n:7,par:3,hcp:17,yards:150},{n:8,par:4,hcp:11,yards:355},{n:9,par:4,hcp:15,yards:330},
+      {n:10,par:4,hcp:6,yards:385},{n:11,par:5,hcp:2,yards:535},{n:12,par:3,hcp:14,yards:165},
+      {n:13,par:4,hcp:10,yards:370},{n:14,par:4,hcp:4,yards:425},{n:15,par:5,hcp:8,yards:520},
+      {n:16,par:3,hcp:18,yards:140},{n:17,par:4,hcp:12,yards:360},{n:18,par:4,hcp:16,yards:340}
+    ]
+  },
+  {
+    id: 'tc03', name: '南投球場', region: '南投縣',
+    holes: [
+      {n:1,par:4,hcp:3,yards:415},{n:2,par:3,hcp:17,yards:160},{n:3,par:5,hcp:9,yards:505},
+      {n:4,par:4,hcp:7,yards:385},{n:5,par:4,hcp:1,yards:445},{n:6,par:3,hcp:15,yards:175},
+      {n:7,par:5,hcp:11,yards:495},{n:8,par:4,hcp:5,yards:400},{n:9,par:4,hcp:13,yards:355},
+      {n:10,par:4,hcp:4,yards:410},{n:11,par:3,hcp:16,yards:155},{n:12,par:5,hcp:2,yards:540},
+      {n:13,par:4,hcp:8,yards:380},{n:14,par:4,hcp:6,yards:420},{n:15,par:3,hcp:18,yards:135},
+      {n:16,par:5,hcp:10,yards:510},{n:17,par:4,hcp:14,yards:350},{n:18,par:4,hcp:12,yards:405}
+    ]
+  }
+];
+
+function initDB() {
+  const COURSE_VERSION = '5';
+  // Always refresh built-in courses if version doesn't match
+  if (localStorage.getItem('golf_course_ver') !== COURSE_VERSION) {
+    // Keep any user-added courses (not in default list)
+    let saved = [];
+    try {
+      saved = DB.courses.filter(c => !['tc01','tc02','tc03','tc04','tc05'].includes(c.id));
+    } catch(e) { saved = []; }
+    DB.courses = [...DEFAULT_COURSES, ...saved];
+    localStorage.setItem('golf_course_ver', COURSE_VERSION);
+  }
+  // Safety net: if still empty, write defaults
+  if (!DB.courses || DB.courses.length === 0) {
+    DB.courses = DEFAULT_COURSES;
+  }
+  // Init players if empty
+  if (!DB.players || DB.players.length === 0) {
+    DB.players = [
+      {id:'p1',name:'球員甲',hcpVs:{},history:[]},
+      {id:'p2',name:'球員乙',hcpVs:{},history:[]},
+      {id:'p3',name:'球員丙',hcpVs:{},history:[]},
+      {id:'p4',name:'球員丁',hcpVs:{},history:[]}
+    ];
+  }
+  // Init rounds if missing
+  if (!DB.rounds) DB.rounds = [];
+}
+
+// ---- APP STATE ----
+let game = null;
+
+// ---- SCREEN NAVIGATION ----
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'screen-players') renderPlayers();
+  if (id === 'screen-courses') { initDB(); renderCourses(); }
+  if (id === 'screen-history') renderHistory('rounds');
+  if (id === 'screen-newgame') { initDB(); setupNewGame(); }
+  if (id === 'screen-scoring') renderScoring();
+}
+
+// ---- TOAST ----
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ---- MODAL ----
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ---- PLAYER COLORS ----
+const PC = ['#2d8a50','#1565c0','#c0392b','#c8971a'];
+const PE = ['甲','乙','丙','丁'];
+
+function playerAvatar(idx) {
+  return `<div class="player-avatar" style="background:${PC[idx%4]}22;color:${PC[idx%4]}">${PE[idx%4]}</div>`;
+}
+
+// ---- NEW GAME SETUP ----
+function setupNewGame() {
+  const courses = DB.courses;
+  const sel = document.getElementById('sel-course');
+  sel.innerHTML = '<option value="">請選擇球場...</option>';
+  courses.forEach(c => { sel.innerHTML += `<option value="${c.id}">${c.name} (${c.region})</option>`; });
+  const players = DB.players;
+  const list = document.getElementById('player-select-list');
+  list.innerHTML = '';
+  players.forEach(p => {
+    list.innerHTML += `<div class="list-item" onclick="togglePlayer('${p.id}',this)">
+      <div class="list-item-main">
+        <div class="list-item-title">${p.name}</div>
+        <div class="list-item-sub">${Object.keys(p.hcpVs||{}).length ? '已設定對手差點' : '尚未設定對手差點'}</div>
+      </div>
+      <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center" id="sel-${p.id}"></div>
+    </div>`;
+  });
+  document.getElementById('course-info').style.display = 'none';
+  selectedPlayers = [];
+  onFormatChange();
+}
+
+let selectedPlayers = [];
+let selectedAmount = 100;
+let selectedSkinAmount = 100;
+let selectedLvAmount = 100;
+let selectedCap = 0;
+
+function onFormatChange() {
+  const doMatch = document.getElementById('fmt-match')?.checked;
+  const doSkin  = document.getElementById('fmt-skin')?.checked;
+  const doLv    = document.getElementById('fmt-lv')?.checked;
+  document.getElementById('setup-match').style.display = doMatch ? 'block' : 'none';
+  document.getElementById('setup-skin').style.display  = doSkin  ? 'block' : 'none';
+  document.getElementById('setup-lv').style.display    = doLv    ? 'block' : 'none';
+  updateAllSetups();
+}
+
+function updateAllSetups() {
+  updateHcpMatrix();
+  updateSkinHcpMatrix();
+  updateLvTeamSetup();
+}
+
+function togglePlayer(id, el) {
+  const idx = selectedPlayers.indexOf(id);
+  const icon = document.getElementById('sel-'+id);
+  if (idx === -1) {
+    if (selectedPlayers.length >= 4) { toast('最多選4位球員'); return; }
+    selectedPlayers.push(id);
+    icon.innerHTML = '✓'; icon.style.cssText = 'background:var(--green);border-color:var(--green);color:#fff;font-size:14px;width:24px;height:24px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center';
+  } else {
+    selectedPlayers.splice(idx, 1);
+    icon.innerHTML = ''; icon.style.cssText = 'width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center';
+  }
+  updateAllSetups();
+}
+
+function updateHcpMatrix() {
+  if (selectedPlayers.length < 2) return;
+  const players = DB.players;
+  const pmap = {};
+  players.forEach(p => pmap[p.id] = p);
+  let html = '';
+  for (let i = 0; i < selectedPlayers.length; i++) {
+    for (let j = i+1; j < selectedPlayers.length; j++) {
+      const pid = selectedPlayers[i], opid = selectedPlayers[j];
+      const p = pmap[pid], op = pmap[opid];
+      const stored = (p.hcpVs||{})[opid] !== undefined ? p.hcpVs[opid] : 0;
+      html += `<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:13px;font-weight:700;flex:1"><span style="color:${PC[i%4]}">${p.name}</span> <span style="color:var(--muted)">vs</span> <span style="color:${PC[j%4]}">${op.name}</span></span>
+          <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--red);cursor:pointer">
+            <input type="checkbox" id="skip_${pid}_${opid}" style="accent-color:var(--red)" onchange="toggleSkip('${pid}','${opid}',this.checked)"> 不比
+          </label>
+        </div>
+        <div id="pair_${pid}_${opid}" style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;color:var(--muted);flex:1"><b>${p.name}</b> 讓 <b>${op.name}</b></span>
+          <button class="hbtn" onclick="adjustHcp2('${pid}','${opid}',-1)">−</button>
+          <span id="hcp_${pid}_${opid}" style="font-size:18px;font-weight:800;color:var(--green);min-width:30px;text-align:center">${stored}</span>
+          <button class="hbtn" onclick="adjustHcp2('${pid}','${opid}',1)">+</button>
+        </div>
+      </div>`;
+    }
+  }
+  document.getElementById('hcp-matrix').innerHTML = html;
+}
+
+function updateSkinHcpMatrix() {
+  if (selectedPlayers.length < 2) { document.getElementById('skin-hcp-matrix').innerHTML = ''; return; }
+  const players = DB.players;
+  const pmap = {};
+  players.forEach(p => pmap[p.id] = p);
+  let html = '';
+  selectedPlayers.forEach((pid, pi) => {
+    const p = pmap[pid];
+    html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="width:28px;height:28px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0">${PE[pi%4]}</div>
+      <span style="flex:1;font-size:14px;font-weight:600">${p.name}</span>
+      <span style="font-size:12px;color:var(--muted)">受讓</span>
+      <button class="hbtn" onclick="adjSkinHcp('${pid}',-1)">−</button>
+      <span id="skin_hcp_${pid}" style="font-size:18px;font-weight:800;color:var(--blue);min-width:28px;text-align:center">0</span>
+      <button class="hbtn" onclick="adjSkinHcp('${pid}',1)">+</button>
+      <span style="font-size:11px;color:var(--muted)">洞</span>
+    </div>`;
+  });
+  document.getElementById('skin-hcp-matrix').innerHTML = html;
+}
+
+function adjSkinHcp(pid, delta) {
+  const el = document.getElementById(`skin_hcp_${pid}`);
+  if (!el) return;
+  el.textContent = Math.max(0, parseInt(el.textContent) + delta);
+}
+
+function updateLvTeamSetup() {
+  if (selectedPlayers.length !== 4) {
+    document.getElementById('lv-team-setup').innerHTML = '<div style="font-size:13px;color:var(--muted)">Las Vegas 需要選擇4位球員</div>';
+    return;
+  }
+  const players = DB.players;
+  const pmap = {};
+  players.forEach(p => pmap[p.id] = p);
+  const names = selectedPlayers.map(id => pmap[id]?.name || id);
+  // First hole: assign team A = players[0],players[1] vs team B = players[2],players[3]
+  document.getElementById('lv-team-setup').innerHTML = `
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">第一洞配對（之後動態調整）</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:${PC[0]}15;border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">A 隊</div>
+        <div style="font-weight:700;color:${PC[0]}">${names[0]}</div>
+        <div style="font-weight:700;color:${PC[1]}">${names[1]}</div>
+      </div>
+      <div style="background:${PC[2]}15;border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">B 隊</div>
+        <div style="font-weight:700;color:${PC[2]}">${names[2]}</div>
+        <div style="font-weight:700;color:${PC[3]}">${names[3]}</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px">💡 從第2洞起自動依當洞桿數重新配對（最低+最高同組）</div>`;
+}
+
+function toggleSkip(pid, opid, skipped) {
+  const d = document.getElementById(`pair_${pid}_${opid}`);
+  if (d) { d.style.opacity = skipped?'0.3':'1'; d.style.pointerEvents = skipped?'none':''; }
+}
+
+function adjustHcp2(pid, opid, delta) {
+  let el = document.getElementById(`hcp_${pid}_${opid}`);
+  if (!el) { el = document.getElementById(`hcp_${opid}_${pid}`); delta = -delta; }
+  if (!el) return;
+  el.textContent = parseInt(el.textContent) + delta;
+}
+
+function onCourseChange() {
+  const id = document.getElementById('sel-course').value;
+  const c = DB.courses.find(x => x.id === id);
+  const info = document.getElementById('course-info');
+  if (!c) { info.style.display = 'none'; return; }
+  info.style.display = 'block';
+  const total = c.holes.reduce((s,h) => s+h.par, 0);
+  document.getElementById('course-info-text').innerHTML = `全場 ${c.holes.length} 洞・標準桿 ${total}・${c.region}`;
+}
+
+function pickAmount(el) {
+  document.querySelectorAll('#amount-picker .amount-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAmount = parseInt(el.dataset.v);
+  document.getElementById('custom-amount').value = '';
+}
+function pickSkinAmount(el) {
+  document.querySelectorAll('#skin-amount-picker .amount-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSkinAmount = parseInt(el.dataset.v);
+  document.getElementById('skin-custom-amount').value = '';
+}
+function pickLvAmount(el) {
+  document.querySelectorAll('#lv-amount-picker .amount-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedLvAmount = parseInt(el.dataset.v);
+  document.getElementById('lv-custom-amount').value = '';
+}
+function pickCap(el) {
+  el.closest('div').querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedCap = parseInt(el.dataset.cap);
+  document.getElementById('custom-cap').value = '';
+}
+
+function startGame() {
+  const courseId = document.getElementById('sel-course').value;
+  if (!courseId) { toast('請選擇球場'); return; }
+  if (selectedPlayers.length < 2) { toast('請選擇至少2位球員'); return; }
+
+  const doMatch = document.getElementById('fmt-match').checked;
+  const doSkin  = document.getElementById('fmt-skin').checked;
+  const doLv    = document.getElementById('fmt-lv').checked;
+  if (!doMatch && !doSkin && !doLv) { toast('請至少選擇一種賽制'); return; }
+  if (doLv && selectedPlayers.length !== 4) { toast('Las Vegas 需要4位球員'); return; }
+
+  const course = DB.courses.find(c => c.id === courseId);
+  const players = DB.players;
+  const pmap = {};
+  players.forEach(p => pmap[p.id] = p);
+
+  // ---- Match Play setup ----
+  const hcpMatrix = {}, skipPairs = new Set();
+  for (let i = 0; i < selectedPlayers.length; i++) {
+    for (let j = i+1; j < selectedPlayers.length; j++) {
+      const pid = selectedPlayers[i], opid = selectedPlayers[j];
+      const el = document.getElementById(`hcp_${pid}_${opid}`);
+      const skipEl = document.getElementById(`skip_${pid}_${opid}`);
+      const val = el ? parseInt(el.textContent)||0 : 0;
+      hcpMatrix[`${pid}_${opid}`] = val;
+      hcpMatrix[`${opid}_${pid}`] = -val;
+      if (skipEl?.checked) skipPairs.add(`${pid}_${opid}`);
+    }
+  }
+  const strokeHolesCache = {};
+  for (let i = 0; i < selectedPlayers.length; i++) {
+    for (let j = i+1; j < selectedPlayers.length; j++) {
+      const pid = selectedPlayers[i], opid = selectedPlayers[j];
+      const val = hcpMatrix[`${pid}_${opid}`];
+      const sh = computeStrokeHoles(course, Math.abs(val));
+      strokeHolesCache[`${pid}_${opid}`] = sh;
+      strokeHolesCache[`${opid}_${pid}`] = sh;
+    }
+  }
+  const custom = document.getElementById('custom-amount').value;
+  const amount = custom ? parseInt(custom) : selectedAmount;
+  const customCap = document.getElementById('custom-cap').value;
+  const maxLoss = customCap !== '' ? parseInt(customCap) : selectedCap;
+
+  // ---- Skin setup ----
+  const skinHcpMap = {}; // pid -> strokeHoles[18] bool array
+  selectedPlayers.forEach(pid => {
+    const el = document.getElementById(`skin_hcp_${pid}`);
+    const n = el ? parseInt(el.textContent)||0 : 0;
+    skinHcpMap[pid] = computeStrokeHoles(course, n);
+  });
+  const skinCustom = document.getElementById('skin-custom-amount').value;
+  const skinAmount = skinCustom ? parseInt(skinCustom) : selectedSkinAmount;
+
+  // ---- Las Vegas setup ----
+  const lvCustom = document.getElementById('lv-custom-amount').value;
+  const lvAmount = lvCustom ? parseInt(lvCustom) : selectedLvAmount;
+  // First hole teams: [0,1] vs [2,3]
+  const lvFirstTeam = [[selectedPlayers[0], selectedPlayers[1]], [selectedPlayers[2], selectedPlayers[3]]];
+
+  game = {
+    courseId, course,
+    playerIds: [...selectedPlayers],
+    players: selectedPlayers.map(id => ({...pmap[id]})),
+    formats: { match: doMatch, skin: doSkin, lv: doLv },
+    // Match
+    amount, maxLoss, hcpMatrix, skipPairs: [...skipPairs], strokeHolesCache,
+    // Skin
+    skinAmount, skinHcpMap,
+    // LV
+    lvAmount, lvFirstTeam,
+    currentHole: 0,
+    holes: course.holes.map(() => ({})),
+    date: new Date().toLocaleDateString('zh-TW')
+  };
+  selectedPlayers = [];
+  showScreen('screen-scoring');
+}
+
+// ---- SCORING ----
+function renderScoring() {
+  if (!game) return;
+  const h = game.course.holes[game.currentHole];
+  document.getElementById('hn-num').textContent = `第 ${h.n} 洞`;
+  document.getElementById('hn-detail').textContent = `Par ${h.par} · HCP ${h.hcp} · ${h.yards}碼`;
+  document.getElementById('hn-progress').style.width = `${((game.currentHole+1)/18)*100}%`;
+
+  const area = document.getElementById('score-players-area');
+  let html = '';
+
+  game.players.forEach((p, pi) => {
+    const score = game.holes[game.currentHole][p.id] || h.par;
+    const scoreName = getScoreName(score, h.par);
+
+    // Show per-opponent status on THIS hole
+    const opBadges = game.players.filter(op => op.id !== p.id).map(op => {
+      if (isPairSkipped(p.id, op.id)) return `<span style="font-size:11px;color:var(--muted)">vs ${op.name}:不比</span>`;
+      const hcpVal = game.hcpMatrix[`${p.id}_${op.id}`] || 0;
+      const giver = hcpVal >= 0 ? p.id : op.id;
+      const sh = game.strokeHolesCache[`${giver}_${hcpVal>=0?op.id:p.id}`] || [];
+      const isStroke = sh[game.currentHole] === true;
+      if (!isStroke) return `<span style="font-size:11px;color:var(--muted)">vs ${op.name}:無讓</span>`;
+      const isGiver = giver === p.id;
+      return `<span style="font-size:11px;font-weight:700;color:${isGiver?'var(--red)':'var(--blue)'}">${isGiver?`讓${op.name}⬇`:`受${op.name}⬆`}</span>`;
+    }).join(' ');
+
+    html += `<div class="score-player">
+      <div class="score-player-header">
+        ${playerAvatar(pi)}
+        <div style="flex:1">
+          <div class="score-player-name">${p.name}</div>
+          <div style="font-size:11px;margin-top:3px;line-height:1.8">${opBadges}</div>
+        </div>
+      </div>
+      <div class="stroke-control">
+        <label>桿數</label>
+        <div style="font-size:12px;color:${getScoreColor(score,h.par)}">${scoreName}</div>
+        <div class="stroke-btns">
+          <button class="stroke-btn minus" onclick="adjStroke('${p.id}',-1)">−</button>
+          <span class="stroke-val" id="sv-${p.id}" style="color:${getScoreColor(score,h.par)}">${score}</span>
+          <button class="stroke-btn" onclick="adjStroke('${p.id}',1)">+</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  area.innerHTML = html;
+}
+
+function getScoreName(s, par) {
+  const d = s - par;
+  if (s === 1) return '一桿進洞 HIO 🎉';
+  if (d <= -3) return '雙鷹+ 🦅🦅';
+  if (d === -2) return par >= 5 ? 'Eagle 🦅' : (par === 4 ? 'Eagle 🦅' : '-');
+  if (d === -1) return 'Birdie 🐦';
+  if (d === 0) return 'Par';
+  if (d === 1) return 'Bogey';
+  if (d === 2) return 'Double Bogey';
+  return `+${d}`;
+}
+
+function getScoreColor(s, par) {
+  const d = s - par;
+  if (s === 1 || d <= -2) return 'var(--gold)';
+  if (d === -1) return 'var(--blue)';
+  if (d === 0) return 'var(--muted)';
+  return 'var(--red)';
+}
+
+function adjStroke(pid, delta) {
+  const hole = game.course.holes[game.currentHole];
+  if (!game.holes[game.currentHole][pid]) game.holes[game.currentHole][pid] = hole.par;
+  let v = game.holes[game.currentHole][pid] + delta;
+  if (v < 1) v = 1;
+  if (v > 15) v = 15;
+  game.holes[game.currentHole][pid] = v;
+  const el = document.getElementById('sv-'+pid);
+  if (el) {
+    el.textContent = v;
+    el.style.color = getScoreColor(v, hole.par);
+  }
+}
+
+function prevHole() {
+  if (game.currentHole > 0) { game.currentHole--; renderScoring(); }
+}
+
+function nextHole() {
+  // Ensure all players have scores for current hole
+  const h = game.course.holes[game.currentHole];
+  game.players.forEach(p => {
+    if (!game.holes[game.currentHole][p.id]) game.holes[game.currentHole][p.id] = h.par;
+  });
+  if (game.currentHole < 17) {
+    game.currentHole++;
+    renderScoring();
+  } else {
+    showScorecard();
+  }
+}
+
+// ---- POINTS CALCULATION ----
+// Returns { playerId: points } for one hole
+// Rules:
+// 1. For each active pair (not skipped), compare net scores (giver's actual+1 on stroke holes)
+//    Lower net score wins 1 matchplay point
+// 2. Birdie bonus: +1 per player who birdies. If BOTH birdie in a pair, cancel each other's bonus
+// 3. Eagle on par4: +4, Eagle on par5: +2, Albatross/HIO: +10
+// Bonus points are independent from matchplay result (can win bonus even on halved hole)
+
+function isPairSkipped(pidA, pidB) {
+  const sp = game.skipPairs || [];
+  return sp.includes(`${pidA}_${pidB}`) || sp.includes(`${pidB}_${pidA}`);
+}
+
+function calcHolePoints(holeIdx) {
+  const h = game.course.holes[holeIdx];
+  const scores = {};
+  game.players.forEach(p => { scores[p.id] = game.holes[holeIdx][p.id] || h.par; });
+
+  const matchPts = {};   // matchplay win/loss points per player
+  const bonusPts = {};   // birdie/eagle/HIO bonus points per player
+  game.players.forEach(p => { matchPts[p.id] = 0; bonusPts[p.id] = 0; });
+
+  // Step 1: pairwise matchplay — zero-sum: winner +1, loser -1, halve 0
+  for (let i = 0; i < game.players.length; i++) {
+    for (let j = i+1; j < game.players.length; j++) {
+      const pi = game.players[i], pj = game.players[j];
+      if (isPairSkipped(pi.id, pj.id)) continue;
+
+      const hcpIJ = game.hcpMatrix[`${pi.id}_${pj.id}`] || 0;
+      const giver = hcpIJ >= 0 ? pi.id : pj.id;
+      const receiver = hcpIJ >= 0 ? pj.id : pi.id;
+      const sh = game.strokeHolesCache[`${giver}_${receiver}`] || [];
+      const isStrokeHole = sh[holeIdx] === true;
+
+      let netI = scores[pi.id];
+      let netJ = scores[pj.id];
+      if (isStrokeHole) {
+        if (giver === pi.id) netI += 1;  // pi gives stroke → pi needs to score lower by 1 more
+        else netJ += 1;
+      }
+
+      if (netI < netJ) { matchPts[pi.id] += 1; matchPts[pj.id] -= 1; }
+      else if (netJ < netI) { matchPts[pj.id] += 1; matchPts[pi.id] -= 1; }
+      // halve: both 0
+    }
+  }
+
+  // Step 2: birdie/eagle/HIO bonus — zero-sum per pair
+  // Each bonus is paid by EACH active opponent individually
+  // e.g. 4-player game, A birdies: A gets +1 from B, +1 from C, +1 from D = +3 total
+  // B, C, D each pay -1
+  // If both A and B birdie: their bonus cancels (A doesn't pay B, B doesn't pay A)
+  // but A still collects from C and D, B still collects from C and D
+
+  for (let i = 0; i < game.players.length; i++) {
+    for (let j = i+1; j < game.players.length; j++) {
+      const pi = game.players[i], pj = game.players[j];
+      if (isPairSkipped(pi.id, pj.id)) continue;
+
+      const si = scores[pi.id], sj = scores[pj.id];
+      const di = si - h.par, dj = sj - h.par;
+
+      // Get bonus value for each player (what they'd earn from one opponent)
+      function bonusVal(s, d) {
+        if (s === 1) return 10;
+        if (d <= -3) return 10;
+        if (d === -2) return h.par === 5 ? 2 : 4;
+        if (d === -1) return 1;
+        return 0;
+      }
+      const bi = bonusVal(si, di);
+      const bj = bonusVal(sj, dj);
+
+      if (bi > 0 && bj > 0) {
+        // Both have bonus — cancel between this pair (net 0 for this pair's bonus exchange)
+        // No bonus points exchanged
+      } else if (bi > 0) {
+        // pi earns bonus from pj
+        bonusPts[pi.id] += bi;
+        bonusPts[pj.id] -= bi;
+      } else if (bj > 0) {
+        // pj earns bonus from pi
+        bonusPts[pj.id] += bj;
+        bonusPts[pi.id] -= bj;
+      }
+    }
+  }
+
+  // Combine: total = matchplay +/- bonus
+  const pts = {};
+  game.players.forEach(p => { pts[p.id] = matchPts[p.id] + bonusPts[p.id]; });
+  pts._matchPts = matchPts;
+  pts._bonusPts = bonusPts;
+  return pts;
+}
+
+// Returns pairwise hole wins: { `${pidA}_${pidB}`: winCount } for all active pairs
+function calcPairwiseHoleWins() {
+  const wins = {};
+  for (let i = 0; i < game.players.length; i++) {
+    for (let j = i+1; j < game.players.length; j++) {
+      const pi = game.players[i], pj = game.players[j];
+      if (isPairSkipped(pi.id, pj.id)) continue;
+      wins[`${pi.id}_${pj.id}`] = 0;
+      wins[`${pj.id}_${pi.id}`] = 0;
+    }
+  }
+  for (let h = 0; h < 18; h++) {
+    const hole = game.course.holes[h];
+    const scores = {};
+    game.players.forEach(p => { scores[p.id] = game.holes[h][p.id] || hole.par; });
+    for (let i = 0; i < game.players.length; i++) {
+      for (let j = i+1; j < game.players.length; j++) {
+        const pi = game.players[i], pj = game.players[j];
+        if (isPairSkipped(pi.id, pj.id)) continue;
+        const hcpIJ = game.hcpMatrix[`${pi.id}_${pj.id}`] || 0;
+        const giver = hcpIJ >= 0 ? pi.id : pj.id;
+        const receiver = hcpIJ >= 0 ? pj.id : pi.id;
+        const sh = game.strokeHolesCache[`${giver}_${receiver}`] || [];
+        let ni = scores[pi.id], nj = scores[pj.id];
+        if (sh[h]) { if (giver===pi.id) ni++; else nj++; }
+        if (ni < nj) wins[`${pi.id}_${pj.id}`]++;
+        else if (nj < ni) wins[`${pj.id}_${pi.id}`]++;
+      }
+    }
+  }
+  return wins;
+}
+
+// Calc raw per-pair net points across 18 holes (matchplay + bonus, zero-sum per pair)
+// Returns { `${pidA}_${pidB}`: netPts } — positive means pidA leads pidB
+function calcRawPairNets() {
+  const nets = {};
+  for (let i = 0; i < game.players.length; i++) {
+    for (let j = i+1; j < game.players.length; j++) {
+      const pi = game.players[i], pj = game.players[j];
+      nets[`${pi.id}_${pj.id}`] = 0;
+    }
+  }
+
+  for (let h = 0; h < 18; h++) {
+    const hole = game.course.holes[h];
+    const scores = {};
+    game.players.forEach(p => { scores[p.id] = game.holes[h][p.id] || hole.par; });
+
+    for (let i = 0; i < game.players.length; i++) {
+      for (let j = i+1; j < game.players.length; j++) {
+        const pi = game.players[i], pj = game.players[j];
+        if (isPairSkipped(pi.id, pj.id)) continue;
+
+        const si = scores[pi.id], sj = scores[pj.id];
+        const di = si - hole.par, dj = sj - hole.par;
+
+        // --- Matchplay point for this pair ---
+        const hcpIJ = game.hcpMatrix[`${pi.id}_${pj.id}`] || 0;
+        const giver = hcpIJ >= 0 ? pi.id : pj.id;
+        const sh = game.strokeHolesCache[`${giver}_${hcpIJ>=0?pj.id:pi.id}`] || [];
+        let ni = si, nj = sj;
+        if (sh[h]) { if (giver===pi.id) ni++; else nj++; }
+        let matchNet = 0; // positive = pi wins this hole match
+        if (ni < nj) matchNet = 1;
+        else if (nj < ni) matchNet = -1;
+
+        // --- Bonus for this pair ---
+        function bonusVal(s, d) {
+          if (s === 1) return 10;
+          if (d <= -3) return 10;
+          if (d === -2) return hole.par === 5 ? 2 : 4;
+          if (d === -1) return 1;
+          return 0;
+        }
+        const bi = bonusVal(si, di), bj = bonusVal(sj, dj);
+        let bonusNet = 0; // positive = pi earns from pj
+        if (bi > 0 && bj > 0) {
+          bonusNet = 0; // cancel
+        } else if (bi > 0) {
+          bonusNet = bi;
+        } else if (bj > 0) {
+          bonusNet = -bj;
+        }
+
+        nets[`${pi.id}_${pj.id}`] += matchNet + bonusNet;
+      }
+    }
+  }
+  return nets;
+}
+
+// Apply cap to pair nets, return { pidA: totalPts } summed across all pairs
+function calcCappedTotals() {
+  const cap = game.maxLoss || 0;
+  const totals = {};
+  game.players.forEach(p => { totals[p.id] = 0; });
+
+  for (let i = 0; i < game.players.length; i++) {
+    for (let j = i+1; j < game.players.length; j++) {
+      const pi = game.players[i], pj = game.players[j];
+      if (isPairSkipped(pi.id, pj.id)) continue;
+      const rawNets = calcRawPairNets();
+      let net = rawNets[`${pi.id}_${pj.id}`]; // positive = pi wins
+      if (cap > 0) {
+        if (net > cap) net = cap;
+        if (net < -cap) net = -cap;
+      }
+      // net is what pi earns FROM pj (zero-sum)
+      totals[pi.id] += net;
+      totals[pj.id] -= net;
+    }
+  }
+  return totals;
+}
+
+function calcTotalPoints() {
+  return calcCappedTotals();
+}
+
+// ================================================================
+// SKIN ENGINE
+// ================================================================
+function calcSkinResults() {
+  const players = game.players;
+  const pts = {}; // pid -> total points won from skin
+  players.forEach(p => { pts[p.id] = 0; });
+
+  let carry = 0;  // accumulated pot from halved holes
+  let holeLog = []; // for display
+
+  for (let h = 0; h < 18; h++) {
+    const hole = game.course.holes[h];
+    const scores = {};
+    players.forEach(p => {
+      const raw = game.holes[h][p.id] || hole.par;
+      // Apply skin handicap: if this player gets a stroke on this hole, net score -1
+      const sh = game.skinHcpMap[p.id] || [];
+      scores[p.id] = sh[h] ? raw - 1 : raw;
+    });
+
+    const minScore = Math.min(...players.map(p => scores[p.id]));
+    const winners = players.filter(p => scores[p.id] === minScore);
+    const losers  = players.filter(p => scores[p.id] !== minScore);
+
+    if (winners.length === 1) {
+      // One winner — claim pot (carry+1), capped at 3 holes total
+      const winner = winners[0];
+      const claimable = Math.min(carry + 1, 3); // max 3 holes incl current
+      const remaining = (carry + 1) - claimable;
+      const opponentCount = losers.length;
+
+      // Each loser pays claimable points to winner
+      let winTotal = claimable * opponentCount;
+      losers.forEach(p => { pts[p.id] -= claimable; });
+      pts[winner.id] += winTotal;
+
+      // Bonus: birdie/eagle/HIO — winner collects from each loser
+      const rawScore = game.holes[h][winner.id] || hole.par;
+      const diff = rawScore - hole.par;
+      let bonus = 0;
+      if (rawScore === 1) bonus = 10;
+      else if (diff <= -3) bonus = 10;
+      else if (diff === -2) bonus = hole.par === 5 ? 2 : 4;
+      else if (diff === -1) bonus = 1;
+
+      if (bonus > 0) {
+        losers.forEach(p => { pts[p.id] -= bonus; });
+        pts[winner.id] += bonus * opponentCount;
+      }
+
+      carry = remaining; // leftover carry
+      holeLog.push({ hole: h+1, winner: winner.name, claimed: claimable, bonus, carry });
+    } else {
+      // Halved — carry over
+      carry++;
+      holeLog.push({ hole: h+1, winner: null, carry });
+    }
+  }
+
+  return { pts, holeLog };
+}
+
+// ================================================================
+// LAS VEGAS ENGINE
+// ================================================================
+function calcLvResults() {
+  const players = game.players;
+  const pts = {};
+  players.forEach(p => { pts[p.id] = 0; });
+
+  let carry = 0;   // number of tied holes carried (pending)
+  let teamLog = [];
+
+  for (let h = 0; h < 18; h++) {
+    const hole = game.course.holes[h];
+    const scores = {};
+    players.forEach(p => { scores[p.id] = game.holes[h][p.id] || hole.par; });
+
+    // Determine teams
+    let teamA, teamB;
+    if (h === 0) {
+      teamA = [...game.lvFirstTeam[0]];
+      teamB = [...game.lvFirstTeam[1]];
+    } else {
+      // Dynamic: sort by score; lowest + highest same team
+      const sorted = [...players].sort((a, b) => {
+        const diff = scores[a.id] - scores[b.id];
+        if (diff !== 0) return diff;
+        const prevA = game.holes[h-1][a.id] || hole.par;
+        const prevB = game.holes[h-1][b.id] || hole.par;
+        return prevA - prevB;
+      });
+      teamA = [sorted[0].id, sorted[3].id];
+      teamB = [sorted[1].id, sorted[2].id];
+    }
+
+    // LV number: low digit first (e.g. scores 4,5 → 45)
+    const scoresA = teamA.map(id => scores[id]).sort((a,b) => a-b);
+    const scoresB = teamB.map(id => scores[id]).sort((a,b) => a-b);
+
+    // Birdie check
+    const birdieA = teamA.filter(id => (game.holes[h][id]||hole.par) - hole.par === -1).length;
+    const birdieB = teamB.filter(id => (game.holes[h][id]||hole.par) - hole.par === -1).length;
+
+    function flipNum(n) {
+      const d1 = Math.floor(n / 10), d2 = n % 10;
+      return d2 * 10 + d1;
+    }
+
+    let lvA = scoresA[0] * 10 + scoresA[1];
+    let lvB = scoresB[0] * 10 + scoresB[1];
+    let multiplier = 1;
+
+    if (birdieA > 0 && birdieB === 0) {
+      lvB = flipNum(lvB);
+      if (birdieA >= 2) multiplier = 2;
+    } else if (birdieB > 0 && birdieA === 0) {
+      lvA = flipNum(lvA);
+      if (birdieB >= 2) multiplier = 2;
+    } else if (birdieA > 0 && birdieB > 0) {
+      lvA = flipNum(lvA);
+      lvB = flipNum(lvB);
+    }
+
+    const holePts = Math.abs(lvA - lvB);
+
+    if (lvA !== lvB) {
+      // Winner claims up to 3x carry (current hole counts as 1)
+      const totalCarry = carry + 1;           // total pending incl. this hole
+      const claimable = Math.min(totalCarry, 3); // max 3 multiplier
+      const remaining = totalCarry - claimable;  // leftover continues to carry
+
+      const wonPts = holePts * claimable * multiplier;
+
+      if (lvA < lvB) {
+        teamA.forEach(id => { pts[id] += wonPts; });
+        teamB.forEach(id => { pts[id] -= wonPts; });
+      } else {
+        teamB.forEach(id => { pts[id] += wonPts; });
+        teamA.forEach(id => { pts[id] -= wonPts; });
+      }
+
+      carry = remaining;
+      teamLog.push({
+        hole: h+1, teamA, teamB, lvA, lvB,
+        holePts, claimable, multiplier, wonPts,
+        carry, winner: lvA < lvB ? 'A' : 'B'
+      });
+    } else {
+      // Tied — carry over
+      carry++;
+      teamLog.push({
+        hole: h+1, teamA, teamB, lvA, lvB,
+        holePts: 0, claimable: 0, multiplier, wonPts: 0,
+        carry, winner: null
+      });
+    }
+  }
+  // Remaining carry at end of round: not counted
+
+  return { pts, teamLog };
+}
+
+// ---- SCORECARD VIEW ----
+function showScorecard() {
+  const h = game.course.holes[game.currentHole];
+  game.players.forEach(p => {
+    if (!game.holes[game.currentHole][p.id]) game.holes[game.currentHole][p.id] = h.par;
+  });
+
+  const totals = calcTotalPoints();
+
+  // ---- Totals summary card ----
+  let totHtml = `<div style="display:grid;grid-template-columns:repeat(${game.players.length},1fr);gap:8px">`;
+  game.players.forEach((p,pi) => {
+    const pts = totals[p.id];
+    const money = pts * game.amount;
+    totHtml += `<div style="text-align:center;padding:10px 6px;background:${PC[pi%4]}15;border-radius:10px">
+      <div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:2px">${p.name}</div>
+      <div style="font-size:24px;font-weight:800;color:${PC[pi%4]}">${pts}</div>
+      <div style="font-size:10px;color:var(--muted)">點</div>
+      <div style="font-size:11px;font-weight:700;color:${money>=0?'var(--green)':'var(--red)'};margin-top:2px">${money>=0?'+':''}$${money}</div>
+    </div>`;
+  });
+  totHtml += '</div>';
+  document.getElementById('sc-totals-area').innerHTML = totHtml;
+
+  // Cache all hole points
+  const allHolePts = [];
+  for (let i = 0; i < 18; i++) allHolePts.push(calcHolePoints(i));
+
+  // ---- Main scorecard table ----
+  // Columns: 洞 Par HCP | [Name strokes, Name pts] x players
+  let thead = `<tr><th>洞</th><th>Par</th><th>HCP</th>`;
+  game.players.forEach(p => {
+    thead += `<th colspan="2" style="min-width:60px">${p.name}</th>`;
+  });
+  thead += `</tr>`;
+  thead += `<tr><th></th><th></th><th></th>`;
+  game.players.forEach(() => {
+    thead += `<th style="font-size:10px;font-weight:500;opacity:0.8">桿</th><th style="font-size:10px;font-weight:500;opacity:0.8">點</th>`;
+  });
+  thead += `</tr>`;
+
+  function scoreClass(s, par) {
+    const d = s - par;
+    if (s === 1 || d <= -2) return 'eagle';
+    if (d === -1) return 'birdie';
+    if (d === 0) return 'par';
+    return 'bogey';
+  }
+
+  function subtotalRow(label, fromHole, toHole, style='background:#e8f5ed') {
+    let row = `<tr style="${style}">`;
+    row += `<td colspan="3" style="font-weight:700;color:var(--green);text-align:left;padding-left:8px">${label}</td>`;
+    game.players.forEach(p => {
+      let strokes = 0, pts = 0;
+      for (let k = fromHole; k < toHole; k++) {
+        strokes += game.holes[k][p.id] || game.course.holes[k].par;
+        pts += allHolePts[k][p.id] || 0;
+      }
+      row += `<td style="font-weight:700;color:var(--text)">${strokes}</td>`;
+      row += `<td style="font-weight:700;color:var(--green)">${pts>0?'+':''}${pts}</td>`;
+    });
+    row += `</tr>`;
+    return row;
+  }
+
+  let tbody = thead;
+  for (let i = 0; i < 18; i++) {
+    const hole = game.course.holes[i];
+    const hp = allHolePts[i];
+    tbody += `<tr>`;
+    tbody += `<td class="col-hole">${hole.n}</td><td>${hole.par}</td><td>${hole.hcp}</td>`;
+    game.players.forEach(p => {
+      const s = game.holes[i][p.id] || hole.par;
+      const pts = hp[p.id] || 0;
+      const cls = scoreClass(s, hole.par);
+      tbody += `<td class="${cls}">${s}</td>`;
+      tbody += `<td style="font-size:12px;color:${pts>0?'var(--green)':pts<0?'var(--red)':'var(--muted)'};font-weight:${pts!==0?700:400}">${pts!==0?(pts>0?'+':'')+pts:'-'}</td>`;
+    });
+    tbody += `</tr>`;
+    if (i === 8) tbody += subtotalRow('前9', 0, 9);
+  }
+  tbody += subtotalRow('後9', 9, 18);
+  // Total row
+  let totRow = `<tr style="background:var(--green)">`;
+  totRow += `<td colspan="3" style="color:#fff;font-weight:800;text-align:left;padding-left:8px">合計</td>`;
+  game.players.forEach(p => {
+    let strokes = 0;
+    for (let k = 0; k < 18; k++) strokes += game.holes[k][p.id] || game.course.holes[k].par;
+    const pts = totals[p.id];
+    totRow += `<td style="color:#fff;font-weight:800">${strokes}</td>`;
+    totRow += `<td style="color:${pts>=0?'#a8ffca':'#ffb3b3'};font-weight:800">${pts>0?'+':''}${pts}</td>`;
+  });
+  totRow += `</tr>`;
+  tbody += totRow;
+
+  document.getElementById('sc-main-table').innerHTML = tbody;
+  showScreen('screen-scorecard');
+}
+
+// ---- END GAME ----
+function endGame() {
+  const formats = game.formats || { match: true };
+  let html = '';
+
+  // ---- Grand total per player (all formats combined) ----
+  const grandTotal = {};
+  game.players.forEach(p => { grandTotal[p.id] = 0; });
+
+  // ---- 1. Individual Match Play ----
+  let matchPairNets = null;
+  if (formats.match) {
+    const totals = calcTotalPoints();
+    const pairWins = calcPairwiseHoleWins();
+    const rawNets = calcRawPairNets();
+    const cap = game.maxLoss || 0;
+    matchPairNets = {};
+    for (let i = 0; i < game.players.length; i++) {
+      for (let j = i+1; j < game.players.length; j++) {
+        const pi = game.players[i], pj = game.players[j];
+        let net = rawNets[`${pi.id}_${pj.id}`] || 0;
+        if (cap > 0) { if (net>cap) net=cap; if (net<-cap) net=-cap; }
+        matchPairNets[`${pi.id}_${pj.id}`] = net;
+        matchPairNets[`${pj.id}_${pi.id}`] = -net;
+      }
+    }
+
+    html += `<div class="card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">🎯</span><span style="font-size:15px;font-weight:800">個人比洞</span><span style="font-size:12px;color:var(--muted)">每點$${game.amount}</span></div>`;
+    game.players.forEach((p,pi) => {
+      const pts = totals[p.id];
+      const money = pts * game.amount;
+      grandTotal[p.id] += money;
+      let vsLines = '';
+      game.players.forEach((op,oi) => {
+        if (op.id === p.id) return;
+        if (isPairSkipped(p.id, op.id)) { vsLines += `<div style="font-size:11px;color:var(--muted)">vs ${op.name}：不比</div>`; return; }
+        const w = pairWins[`${p.id}_${op.id}`]||0, l = pairWins[`${op.id}_${p.id}`]||0;
+        const net = matchPairNets[`${p.id}_${op.id}`]||0;
+        const raw = rawNets[`${p.id}_${op.id}`]||0;
+        const capNote = (cap>0 && Math.abs(raw)>cap) ? ` (原${raw>0?'+':''}${raw})` : '';
+        vsLines += `<div style="font-size:11px;color:${net>0?'var(--green)':net<0?'var(--red)':'var(--muted)'}">vs ${op.name}：${w}勝${l}負 ${net>0?'+':''}${net}點${capNote}</div>`;
+      });
+      html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+        ${playerAvatar(pi)}
+        <div style="flex:1">${vsLines}</div>
+        <div style="text-align:right">
+          <div style="font-size:15px;font-weight:800;color:${PC[pi%4]}">${pts>0?'+':''}${pts}pt</div>
+          <div style="font-size:12px;font-weight:700;color:${money>=0?'var(--green)':'var(--red)'}">${money>=0?'+':''}$${money}</div>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+
+    // HCP adjustment (existing logic)
+    const newHcpVs = {};
+    const dbPlayers = DB.players;
+    game.players.forEach(p => { const dbp = dbPlayers.find(x=>x.id===p.id); newHcpVs[p.id]={...(dbp?.hcpVs||{})}; });
+    const hcpChanges = {};
+    game.players.forEach(p => { hcpChanges[p.id] = []; });
+    for (let i = 0; i < game.players.length; i++) {
+      for (let j = i+1; j < game.players.length; j++) {
+        const pi = game.players[i], pj = game.players[j];
+        if (isPairSkipped(pi.id,pj.id)) continue;
+        const wi = pairWins[`${pi.id}_${pj.id}`]||0, wj = pairWins[`${pj.id}_${pi.id}`]||0;
+        let net = wi-wj; const cap2 = game.maxLoss||0;
+        if (cap2>0) { if(net>cap2) net=cap2; if(net<-cap2) net=-cap2; }
+        const curHcp = game.hcpMatrix[`${pi.id}_${pj.id}`]||0;
+        const adj = Math.floor(Math.abs(net)/3)*(net>0?1:-1);
+        const newHcp = curHcp+adj;
+        newHcpVs[pi.id][pj.id]=newHcp; newHcpVs[pj.id][pi.id]=-newHcp;
+        hcpChanges[pi.id].push({vs:pj.name,old:curHcp,newV:newHcp,adj,net});
+        hcpChanges[pj.id].push({vs:pi.name,old:-curHcp,newV:-newHcp,adj:-adj,net:-net});
+      }
+    }
+    game.players.forEach((p,pi) => { game.players[pi]._newHcpVs = newHcpVs[p.id]; });
+
+    let haHtml = `<div class="card"><div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px">差點調整（比洞）</div>`;
+    game.players.forEach((p,pi) => {
+      haHtml += `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">${playerAvatar(pi)}<span style="font-size:13px;font-weight:600;flex:1">${p.name}</span><span style="font-size:11px;color:var(--muted)">${hcpChanges[p.id].map(c=>`vs ${c.vs}: ${c.old}→${c.newV}`).join(' · ')}</span></div>`;
+    });
+    haHtml += `<div style="font-size:11px;color:var(--muted);margin-top:6px">每3洞勝差調整1洞差點</div></div>`;
+    html += haHtml;
+  }
+
+  // ---- 2. Skin ----
+  if (formats.skin) {
+    const { pts: skinPts, holeLog } = calcSkinResults();
+    game.players.forEach(p => { grandTotal[p.id] += skinPts[p.id] * game.skinAmount; });
+
+    html += `<div class="card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">🦊</span><span style="font-size:15px;font-weight:800">Skin</span><span style="font-size:12px;color:var(--muted)">每點$${game.skinAmount}</span></div>`;
+    game.players.forEach((p,pi) => {
+      const pts = skinPts[p.id];
+      const money = pts * game.skinAmount;
+      html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+        ${playerAvatar(pi)}<span style="flex:1;font-weight:600">${p.name}</span>
+        <span style="font-size:15px;font-weight:800;color:${PC[pi%4]}">${pts>0?'+':''}${pts}pt</span>
+        <span style="font-size:13px;font-weight:700;color:${money>=0?'var(--green)':'var(--red)'};min-width:70px;text-align:right">${money>=0?'+':''}$${money}</span>
+      </div>`;
+    });
+    // Hole log
+    html += `<div style="margin-top:10px;font-size:12px;color:var(--muted);font-weight:600">Skin洞況</div>`;
+    holeLog.forEach(l => {
+      html += `<div style="font-size:11px;padding:3px 0;color:${l.winner?'var(--green)':'var(--muted)'}">第${l.hole}洞：${l.winner ? `${l.winner}贏得${l.claimed}洞${l.bonus>0?` +Bonus${l.bonus}`:''}${l.carry>0?`（剩餘${l.carry}洞保留）`:''}`:`和局（累積${l.carry}洞）`}</div>`;
+    });
+    html += '</div>';
+  }
+
+  // ---- 3. Las Vegas ----
+  if (formats.lv) {
+    const { pts: lvPts, teamLog } = calcLvResults();
+    const pmap = {};
+    game.players.forEach(p => { pmap[p.id] = p; });
+    game.players.forEach(p => { grandTotal[p.id] += lvPts[p.id] * game.lvAmount; });
+
+    html += `<div class="card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">🎰</span><span style="font-size:15px;font-weight:800">Las Vegas</span><span style="font-size:12px;color:var(--muted)">每點$${game.lvAmount}</span></div>`;
+    game.players.forEach((p,pi) => {
+      const pts = lvPts[p.id];
+      const money = pts * game.lvAmount;
+      html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+        ${playerAvatar(pi)}<span style="flex:1;font-weight:600">${p.name}</span>
+        <span style="font-size:15px;font-weight:800;color:${PC[pi%4]}">${pts>0?'+':''}${pts}pt</span>
+        <span style="font-size:13px;font-weight:700;color:${money>=0?'var(--green)':'var(--red)'};min-width:70px;text-align:right">${money>=0?'+':''}$${money}</span>
+      </div>`;
+    });
+    html += `<div style="margin-top:10px;font-size:12px;color:var(--muted);font-weight:600">各洞配對記錄</div>`;
+    teamLog.forEach(l => {
+      const pmap2 = {};
+      game.players.forEach(p => { pmap2[p.id] = p; });
+      const aN = l.teamA.map(id => pmap2[id]?.name||id).join('+');
+      const bN = l.teamB.map(id => pmap2[id]?.name||id).join('+');
+      let desc = '';
+      if (l.winner) {
+        const winTeam = l.winner === 'A' ? aN : bN;
+        const capNote = l.claimable < (l.claimable + l.carry) && l.carry > 0 ? `（剩${l.carry}洞保留）` : '';
+        desc = `${winTeam} 贏 ${l.wonPts}pt（×${l.claimable}${l.multiplier>1?'×'+l.multiplier:''}）${capNote}`;
+      } else {
+        desc = `和局 → 累積${l.carry}洞保留`;
+      }
+      html += `<div style="font-size:11px;padding:2px 0;color:${l.winner?'var(--green)':'var(--muted)'}">第${l.hole}洞 [${aN}]<b>${l.lvA}</b> vs [${bN}]<b>${l.lvB}</b>：${desc}</div>`;
+    });
+    html += '</div>';
+  }
+
+  // ---- Grand Total ----
+  const fmtCount = [formats.match, formats.skin, formats.lv].filter(Boolean).length;
+  if (fmtCount > 1) {
+    html += `<div class="card" style="border:2px solid var(--gold)"><div style="font-size:15px;font-weight:800;margin-bottom:10px">💰 合計賭金</div>`;
+    game.players.forEach((p,pi) => {
+      const money = grandTotal[p.id];
+      html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+        ${playerAvatar(pi)}<span style="flex:1;font-weight:700;font-size:15px">${p.name}</span>
+        <span style="font-size:18px;font-weight:800;color:${money>=0?'var(--green)':'var(--red)'}">${money>=0?'+':''}$${money}</span>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('result-players').innerHTML = html;
+  document.getElementById('result-hcp-adj').innerHTML = '';
+  document.getElementById('result-date').textContent = game.date;
+  showScreen('screen-result');
+}
+
+function confirmDiscard() {
+  if (confirm('確定放棄此局？成績不會儲存，差點也不會更新。')) {
+    game = null;
+    showScreen('screen-home');
+    toast('賽局已放棄');
+  }
+}
+
+function saveAndHome() {
+  const players = DB.players;
+  game.players.forEach(gp => {
+    const p = players.find(x => x.id === gp.id);
+    if (p && gp._newHcpVs !== undefined) {
+      p.hcpVs = gp._newHcpVs;
+      p.history = p.history || [];
+      p.history.push({ date: game.date, hcpVs: { ...gp._newHcpVs } });
+    }
+  });
+  DB.players = players;
+
+  const rounds = DB.rounds;
+  const totals = calcTotalPoints();
+  const pairWins = calcPairwiseHoleWins();
+  const rawNets = calcRawPairNets();
+  const cap = game.maxLoss || 0;
+
+  // Build pairwise capped net summary
+  const pairNets = {}; // `${pidA}_${pidB}`: capped net (positive = pidA wins)
+  for (let i = 0; i < game.players.length; i++) {
+    for (let j = i+1; j < game.players.length; j++) {
+      const pi = game.players[i], pj = game.players[j];
+      let net = rawNets[`${pi.id}_${pj.id}`] || 0;
+      if (cap > 0) { if (net > cap) net = cap; if (net < -cap) net = -cap; }
+      pairNets[`${pi.id}_${pj.id}`] = net;
+      pairNets[`${pj.id}_${pi.id}`] = -net;
+    }
+  }
+
+  // Build full per-hole scorecard: holeScores[holeIdx][pid] = strokes
+  const holeScores = game.holes.map((h, idx) => {
+    const entry = {};
+    game.players.forEach(p => { entry[p.id] = h[p.id] || game.course.holes[idx].par; });
+    return entry;
+  });
+
+  // Per-hole points
+  const holePoints = [];
+  for (let i = 0; i < 18; i++) {
+    const hp = calcHolePoints(i);
+    const entry = {};
+    game.players.forEach(p => { entry[p.id] = hp[p.id] || 0; });
+    holePoints.push(entry);
+  }
+
+  rounds.push({
+    id: Date.now().toString(),
+    date: game.date,
+    courseName: game.course.name,
+    courseId: game.courseId,
+    courseHoles: game.course.holes,   // save hole par/hcp for display
+    playerIds: game.playerIds,
+    playerNames: game.players.map(p => p.name),
+    amount: game.amount,
+    maxLoss: game.maxLoss || 0,
+    totals,
+    pairNets,         // capped net per pair
+    pairWins,         // hole-win counts per pair
+    hcpMatrix: game.hcpMatrix,
+    skipPairs: game.skipPairs,
+    holeScores,       // full 18-hole strokes
+    holePoints        // full 18-hole points
+  });
+  DB.rounds = rounds;
+
+  toast('賽局已儲存！差點已更新');
+  game = null;
+  showScreen('screen-home');
+}
+
+// ---- PLAYERS ----
+function renderPlayers() {
+  const players = DB.players;
+  const list = document.getElementById('players-list');
+  if (players.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="ei">👤</div><p>尚無球員，請新增</p></div>`;
+    return;
+  }
+  list.innerHTML = players.map((p,i) => {
+    // Show per-opponent handicap summary
+    const hcpLines = Object.entries(p.hcpVs || {}).map(([opId, v]) => {
+      const op = players.find(x => x.id === opId);
+      if (!op) return null;
+      return `vs ${op.name}：${v > 0 ? `讓${v}洞` : v < 0 ? `受${Math.abs(v)}洞` : '平手'}`;
+    }).filter(Boolean);
+    const sub = hcpLines.length ? hcpLines.join('・') : '尚未設定差點';
+    return `
+    <div class="list-item" onclick="openEditPlayer('${p.id}')">
+      <div style="width:36px;height:36px;border-radius:50%;background:${PC[i%4]}22;color:${PC[i%4]};display:flex;align-items:center;justify-content:center;font-weight:700;margin-right:12px;flex-shrink:0">${PE[i%4]}</div>
+      <div class="list-item-main">
+        <div class="list-item-title">${p.name}</div>
+        <div class="list-item-sub" style="font-size:11px">${sub}</div>
+      </div>
+      <div class="list-item-action">›</div>
+    </div>`;
+  }).join('');
+}
+
+function openAddPlayer() {
+  document.getElementById('pl-name').value = '';
+  document.getElementById('pl-id').value = '';
+  document.getElementById('pl-hcp-matrix').innerHTML = '<div style="font-size:13px;color:var(--muted)">儲存後可在此設定對各球員的差點</div>';
+  document.getElementById('del-player-btn').style.display = 'none';
+  document.getElementById('modal-player').classList.add('open');
+}
+
+function openEditPlayer(id) {
+  const players = DB.players;
+  const p = players.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('pl-name').value = p.name;
+  document.getElementById('pl-id').value = p.id;
+  document.getElementById('del-player-btn').style.display = 'block';
+
+  // Build per-opponent hcp matrix
+  const others = players.filter(x => x.id !== id);
+  if (others.length === 0) {
+    document.getElementById('pl-hcp-matrix').innerHTML = '<div style="font-size:13px;color:var(--muted)">新增更多球員後可在此設定差點</div>';
+  } else {
+    let mHtml = '';
+    others.forEach(op => {
+      const v = (p.hcpVs || {})[op.id] !== undefined ? (p.hcpVs || {})[op.id] : 0;
+      mHtml += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="flex:1;font-size:14px">vs <b>${op.name}</b></span>
+        <button class="hbtn" onclick="adjPlayerHcp('${id}','${op.id}',-1)">−</button>
+        <span id="phcp_${id}_${op.id}" style="font-size:20px;font-weight:800;color:var(--green);min-width:32px;text-align:center">${v}</span>
+        <button class="hbtn" onclick="adjPlayerHcp('${id}','${op.id}',1)">+</button>
+        <span style="font-size:11px;color:var(--muted);min-width:50px">${v>0?`讓${v}洞`:v<0?`受${Math.abs(v)}洞`:'平手'}</span>
+      </div>`;
+    });
+    document.getElementById('pl-hcp-matrix').innerHTML = mHtml;
+  }
+  document.getElementById('modal-player').classList.add('open');
+}
+
+function adjPlayerHcp(pid, opid, delta) {
+  const el = document.getElementById(`phcp_${pid}_${opid}`);
+  const v = parseInt(el.textContent) + delta;
+  el.textContent = v;
+  // Update label
+  const label = el.nextElementSibling?.nextElementSibling || el.parentElement.querySelector('span:last-child');
+  // find the last span in that row for label
+  const row = el.closest('div');
+  const spans = row.querySelectorAll('span');
+  const lastSpan = spans[spans.length-1];
+  if (lastSpan) lastSpan.textContent = v>0?`讓${v}洞`:v<0?`受${Math.abs(v)}洞`:'平手';
+}
+
+function savePlayer() {
+  const name = document.getElementById('pl-name').value.trim();
+  if (!name) { toast('請輸入姓名'); return; }
+  const id = document.getElementById('pl-id').value;
+  const players = DB.players;
+  
+  if (id) {
+    const p = players.find(x => x.id === id);
+    if (p) {
+      p.name = name;
+      // Save hcpVs from matrix inputs
+      const others = players.filter(x => x.id !== id);
+      others.forEach(op => {
+        const el = document.getElementById(`phcp_${id}_${op.id}`);
+        if (el) {
+          const v = parseInt(el.textContent) || 0;
+          p.hcpVs = p.hcpVs || {};
+          p.hcpVs[op.id] = v;
+          // Mirror to opponent
+          op.hcpVs = op.hcpVs || {};
+          op.hcpVs[id] = -v;
+        }
+      });
+    }
+  } else {
+    players.push({ id: 'p'+Date.now(), name, hcpVs: {}, history: [] });
+  }
+  DB.players = players;
+  closeModal('modal-player');
+  renderPlayers();
+  toast('球員資料已儲存');
+}
+
+function deletePlayer() {
+  const id = document.getElementById('pl-id').value;
+  if (!id) return;
+  const players = DB.players.filter(p => p.id !== id);
+  DB.players = players;
+  closeModal('modal-player');
+  renderPlayers();
+  toast('球員已刪除');
+}
+
+// ---- COURSES ----
+function renderCourses() {
+  const courses = DB.courses;
+  const list = document.getElementById('courses-list');
+  list.innerHTML = courses.map(c => `
+    <div class="list-item" onclick="openEditCourse('${c.id}')">
+      <div class="list-item-main">
+        <div class="list-item-title">⛳ ${c.name}</div>
+        <div class="list-item-sub">${c.region}・18洞・Par ${c.holes.reduce((s,h)=>s+h.par,0)}</div>
+      </div>
+      <div class="list-item-action">›</div>
+    </div>`).join('');
+}
+
+function buildHolesUI(holes) {
+  let html = '<div class="section-divider">18洞詳細資料</div>';
+  html += '<div style="overflow-x:auto"><table style="width:max-content;min-width:100%;border-collapse:collapse;font-size:13px">';
+  html += '<tr><th style="padding:6px 8px;background:var(--green);color:#fff">洞</th><th style="padding:6px 8px;background:var(--green);color:#fff">Par</th><th style="padding:6px 8px;background:var(--green);color:#fff">HCP</th><th style="padding:6px 8px;background:var(--green);color:#fff">碼數</th></tr>';
+  for (let i = 0; i < 18; i++) {
+    const h = holes[i] || {par:4,hcp:i+1,yards:380};
+    html += `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:6px 8px;text-align:center;font-weight:700;color:var(--green)">${i+1}</td>
+      <td style="padding:4px;text-align:center"><input type="number" value="${h.par}" id="co-par-${i}" style="width:44px;text-align:center;padding:4px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg)" min="3" max="5" inputmode="numeric"></td>
+      <td style="padding:4px;text-align:center"><input type="number" value="${h.hcp}" id="co-hcp-${i}" style="width:44px;text-align:center;padding:4px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg)" min="1" max="18" inputmode="numeric"></td>
+      <td style="padding:4px;text-align:center"><input type="number" value="${h.yards}" id="co-yds-${i}" style="width:54px;text-align:center;padding:4px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg)" inputmode="numeric"></td>
+    </tr>`;
+  }
+  html += '</table></div>';
+  return html;
+}
+
+function openAddCourse() {
+  document.getElementById('co-name').value = '';
+  document.getElementById('co-region').value = '';
+  document.getElementById('co-id').value = '';
+  document.getElementById('del-course-btn').style.display = 'none';
+  const blank = Array.from({length:18},(_,i)=>({par:4,hcp:i+1,yards:380}));
+  document.getElementById('co-holes-setup').innerHTML = buildHolesUI(blank);
+  document.getElementById('modal-course').classList.add('open');
+}
+
+function openEditCourse(id) {
+  const c = DB.courses.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('co-name').value = c.name;
+  document.getElementById('co-region').value = c.region;
+  document.getElementById('co-id').value = c.id;
+  document.getElementById('del-course-btn').style.display = 'block';
+  document.getElementById('co-holes-setup').innerHTML = buildHolesUI(c.holes);
+  document.getElementById('modal-course').classList.add('open');
+}
+
+function saveCourse() {
+  const name = document.getElementById('co-name').value.trim();
+  if (!name) { toast('請輸入球場名稱'); return; }
+  const region = document.getElementById('co-region').value.trim();
+  const id = document.getElementById('co-id').value;
+  const holes = Array.from({length:18},(_,i)=>({
+    n: i+1,
+    par: parseInt(document.getElementById(`co-par-${i}`).value) || 4,
+    hcp: parseInt(document.getElementById(`co-hcp-${i}`).value) || (i+1),
+    yards: parseInt(document.getElementById(`co-yds-${i}`).value) || 380
+  }));
+  const courses = DB.courses;
+  if (id) {
+    const c = courses.find(x => x.id === id);
+    if (c) { c.name = name; c.region = region; c.holes = holes; }
+  } else {
+    courses.push({ id: 'co'+Date.now(), name, region, holes });
+  }
+  DB.courses = courses;
+  closeModal('modal-course');
+  renderCourses();
+  toast('球場資料已儲存');
+}
+
+function deleteCourse() {
+  const id = document.getElementById('co-id').value;
+  if (!id) return;
+  DB.courses = DB.courses.filter(c => c.id !== id);
+  closeModal('modal-course');
+  renderCourses();
+  toast('球場已刪除');
+}
+
+// ---- HISTORY ----
+function histTab(tab, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('hist-rounds').style.display = tab === 'rounds' ? 'block' : 'none';
+  document.getElementById('hist-stats').style.display = tab === 'stats' ? 'block' : 'none';
+  if (tab === 'rounds') renderHistRounds();
+  if (tab === 'stats') renderHistStats();
+}
+
+function renderHistory(tab) {
+  renderHistRounds();
+  document.getElementById('hist-rounds').style.display = 'block';
+  document.getElementById('hist-stats').style.display = 'none';
+}
+
+function renderHistRounds() {
+  const rounds = DB.rounds.slice().reverse();
+  const el = document.getElementById('hist-rounds');
+  if (rounds.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div class="ei">📊</div><p>尚無賽局紀錄</p></div>`;
+    return;
+  }
+  el.innerHTML = rounds.map(r => {
+    const capNote = r.maxLoss > 0 ? `・上限${r.maxLoss}點` : '';
+    const badges = r.playerNames.map((n,i) => {
+      const pts = r.totals[r.playerIds[i]] || 0;
+      return `<span class="badge ${pts>0?'badge-green':pts<0?'badge-red':'badge-blue'}">${n} ${pts>0?'+':''}${pts}</span>`;
+    }).join('');
+    return `<div class="card" style="cursor:pointer" onclick="showRoundDetail('${r.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div>
+          <div style="font-size:15px;font-weight:700">⛳ ${r.courseName}</div>
+          <div style="font-size:12px;color:var(--muted)">${r.date}・每點$${r.amount}${capNote}</div>
+        </div>
+        <div style="font-size:18px;color:var(--muted)">›</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${badges}</div>
+    </div>`;
+  }).join('');
+}
+
+function showRoundDetail(id) {
+  const r = DB.rounds.find(x => x.id === id);
+  if (!r) return;
+  const capNote = r.maxLoss > 0 ? `・上限${r.maxLoss}點` : '';
+  document.getElementById('modal-rd-title').innerHTML = `${r.courseName} <span class="modal-close" onclick="closeModal('modal-round-detail')">×</span>`;
+
+  let html = `<div style="font-size:13px;color:var(--muted);margin-bottom:12px">${r.date}・每點$${r.amount}${capNote}</div>`;
+
+  // Summary totals
+  html += `<div class="card" style="margin-bottom:10px"><div class="card-title">各人合計</div>`;
+  r.playerNames.forEach((n,i) => {
+    const pid = r.playerIds[i];
+    const pts = r.totals[pid] || 0;
+    const money = pts * r.amount;
+    html += `<div class="summary-row">
+      <span class="label" style="font-weight:600">${n}</span>
+      <span class="val ${pts>0?'pos':pts<0?'neg':'neu'}">${pts>0?'+':''}${pts}點・${money>=0?'+':''}$${money}</span>
+    </div>`;
+  });
+  html += '</div>';
+
+  // Pairwise results
+  if (r.pairNets) {
+    html += `<div class="card" style="margin-bottom:10px"><div class="card-title">個人對個人勝負</div>`;
+    const shown = new Set();
+    r.playerIds.forEach((pid, i) => {
+      r.playerIds.forEach((opid, j) => {
+        if (pid === opid) return;
+        const key = [pid,opid].sort().join('_');
+        if (shown.has(key)) return;
+        shown.add(key);
+        if (r.skipPairs && (r.skipPairs.includes(`${pid}_${opid}`) || r.skipPairs.includes(`${opid}_${pid}`))) {
+          html += `<div class="summary-row"><span class="label">${r.playerNames[i]} vs ${r.playerNames[j]}</span><span class="val neu">不比</span></div>`;
+          return;
+        }
+        const net = r.pairNets[`${pid}_${opid}`] || 0;
+        const w = r.pairWins ? (r.pairWins[`${pid}_${opid}`]||0) : '-';
+        const l = r.pairWins ? (r.pairWins[`${opid}_${pid}`]||0) : '-';
+        const winner = net > 0 ? r.playerNames[i] : net < 0 ? r.playerNames[j] : null;
+        const absNet = Math.abs(net);
+        const color = net > 0 ? 'pos' : net < 0 ? 'neg' : 'neu';
+        const resultTxt = winner ? `${winner} +${absNet}點 (${w}勝${l}負)` : `平手 (${w}勝${l}負)`;
+        html += `<div class="summary-row">
+          <span class="label">${r.playerNames[i]} vs ${r.playerNames[j]}</span>
+          <span class="val ${color}">${resultTxt}</span>
+        </div>`;
+      });
+    });
+    html += '</div>';
+  }
+
+  // Full scorecard if data available
+  if (r.holeScores && r.courseHoles) {
+    html += `<div class="card" style="padding:8px;margin-bottom:10px"><div class="card-title" style="margin-bottom:8px">完整計分卡</div>`;
+    html += `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch">`;
+    html += `<table style="border-collapse:collapse;width:max-content;font-size:12px">`;
+    // Header
+    html += `<tr><th style="padding:5px 8px;background:var(--green);color:#fff;white-space:nowrap">洞</th><th style="padding:5px 8px;background:var(--green);color:#fff">Par</th><th style="padding:5px 8px;background:var(--green);color:#fff">HCP</th>`;
+    r.playerNames.forEach(n => {
+      html += `<th colspan="2" style="padding:5px 8px;background:var(--green);color:#fff;white-space:nowrap">${n}</th>`;
+    });
+    html += `</tr><tr><td></td><td></td><td></td>`;
+    r.playerNames.forEach(() => {
+      html += `<td style="padding:3px 6px;background:#1a5a30;color:#ccc;font-size:10px;text-align:center">桿</td><td style="padding:3px 6px;background:#1a5a30;color:#ccc;font-size:10px;text-align:center">點</td>`;
+    });
+    html += `</tr>`;
+
+    function scClass(s,par) { const d=s-par; return s===1||d<=-2?'eagle':d===-1?'birdie':d===0?'par':'bogey'; }
+    let f9Strokes={}, f9Pts={}, b9Strokes={}, b9Pts={};
+    r.playerIds.forEach(pid => { f9Strokes[pid]=0; f9Pts[pid]=0; b9Strokes[pid]=0; b9Pts[pid]=0; });
+
+    for (let i = 0; i < 18; i++) {
+      const hole = r.courseHoles[i];
+      html += `<tr style="${i%2===1?'background:#f7faf7':''}">`;
+      html += `<td style="padding:5px 8px;font-weight:700;color:var(--green);text-align:center">${hole.n}</td>`;
+      html += `<td style="padding:5px 8px;text-align:center">${hole.par}</td>`;
+      html += `<td style="padding:5px 8px;text-align:center">${hole.hcp}</td>`;
+      r.playerIds.forEach(pid => {
+        const s = r.holeScores[i] ? (r.holeScores[i][pid] || hole.par) : hole.par;
+        const pts = r.holePoints && r.holePoints[i] ? (r.holePoints[i][pid] || 0) : 0;
+        const cls = scClass(s, hole.par);
+        const ptsColor = pts>0?'var(--green)':pts<0?'var(--red)':'var(--muted)';
+        const ptsStyle = `color:${ptsColor};font-weight:${pts!==0?700:400}`;
+        html += `<td style="padding:5px 8px;text-align:center" class="${cls}">${s}</td>`;
+        html += `<td style="padding:5px 8px;text-align:center;${ptsStyle}">${pts!==0?(pts>0?'+':'')+pts:'-'}</td>`;
+        if (i < 9) { f9Strokes[pid]+=s; f9Pts[pid]+=pts; }
+        else { b9Strokes[pid]+=s; b9Pts[pid]+=pts; }
+      });
+      html += `</tr>`;
+      if (i === 8) {
+        html += `<tr style="background:#e8f5ed"><td colspan="3" style="padding:5px 8px;font-weight:700;color:var(--green)">前9</td>`;
+        r.playerIds.forEach(pid => {
+          html += `<td style="padding:5px 8px;text-align:center;font-weight:700">${f9Strokes[pid]}</td><td style="padding:5px 8px;text-align:center;font-weight:700;color:${f9Pts[pid]>0?'var(--green)':f9Pts[pid]<0?'var(--red)':'var(--muted)'}">${f9Pts[pid]>0?'+':''}${f9Pts[pid]}</td>`;
+        });
+        html += `</tr>`;
+      }
+    }
+    // Back9 subtotal
+    html += `<tr style="background:#e8f5ed"><td colspan="3" style="padding:5px 8px;font-weight:700;color:var(--green)">後9</td>`;
+    r.playerIds.forEach(pid => {
+      html += `<td style="padding:5px 8px;text-align:center;font-weight:700">${b9Strokes[pid]}</td><td style="padding:5px 8px;text-align:center;font-weight:700;color:${b9Pts[pid]>0?'var(--green)':b9Pts[pid]<0?'var(--red)':'var(--muted)'}">${b9Pts[pid]>0?'+':''}${b9Pts[pid]}</td>`;
+    });
+    html += `</tr>`;
+    // Total
+    html += `<tr style="background:var(--green)"><td colspan="3" style="padding:5px 8px;font-weight:800;color:#fff">合計</td>`;
+    r.playerIds.forEach(pid => {
+      const tot = (f9Strokes[pid]||0)+(b9Strokes[pid]||0);
+      const pts = r.totals[pid]||0;
+      html += `<td style="padding:5px 8px;text-align:center;font-weight:800;color:#fff">${tot}</td><td style="padding:5px 8px;text-align:center;font-weight:800;color:${pts>=0?'#a8ffca':'#ffb3b3'}">${pts>0?'+':''}${pts}</td>`;
+    });
+    html += `</tr></table></div></div>`;
+  }
+
+  document.getElementById('modal-rd-content').innerHTML = html;
+  document.getElementById('modal-round-detail').classList.add('open');
+}
+
+function renderHistStats() {
+  const players = DB.players;
+  let rounds = DB.rounds;
+  const el = document.getElementById('hist-stats-content');
+  if (!el) return;
+  if (players.length === 0) { el.innerHTML = `<div class="empty-state"><div class="ei">👤</div><p>尚無球員資料</p></div>`; return; }
+
+  // Date filter
+  const fromEl = document.getElementById('stat-date-from');
+  const toEl = document.getElementById('stat-date-to');
+  if (fromEl && fromEl.value) {
+    rounds = rounds.filter(r => {
+      const rd = r.date.replace(/\//g,'-');
+      return rd >= fromEl.value;
+    });
+  }
+  if (toEl && toEl.value) {
+    rounds = rounds.filter(r => {
+      const rd = r.date.replace(/\//g,'-');
+      return rd <= toEl.value;
+    });
+  }
+
+  let html = '';
+  players.forEach((p,pi) => {
+    const myRounds = rounds.filter(r => r.playerIds.includes(p.id));
+    if (myRounds.length === 0) {
+      html += `<div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="width:40px;height:40px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800">${PE[pi%4]}</div>
+          <div><div style="font-size:16px;font-weight:700">${p.name}</div><div style="font-size:12px;color:var(--muted)">此區間無賽局紀錄</div></div>
+        </div></div>`;
+      return;
+    }
+    const totalPts = myRounds.reduce((s,r) => s + (r.totals[p.id]||0), 0);
+    const totalMoney = myRounds.reduce((s,r) => s + (r.totals[p.id]||0)*r.amount, 0);
+
+    // Per-opponent breakdown
+    const oppStats = {}; // opName: { wins, losses, draws, pts, money }
+    myRounds.forEach(r => {
+      r.playerIds.forEach((opid, oi) => {
+        if (opid === p.id) return;
+        if (r.skipPairs && (r.skipPairs.includes(`${p.id}_${opid}`) || r.skipPairs.includes(`${opid}_${p.id}`))) return;
+        const opName = r.playerNames[oi];
+        if (!oppStats[opName]) oppStats[opName] = {wins:0,losses:0,draws:0,pts:0,money:0,rounds:0};
+        const net = r.pairNets ? (r.pairNets[`${p.id}_${opid}`]||0) : 0;
+        oppStats[opName].rounds++;
+        oppStats[opName].pts += net;
+        oppStats[opName].money += net * r.amount;
+        if (net > 0) oppStats[opName].wins++;
+        else if (net < 0) oppStats[opName].losses++;
+        else oppStats[opName].draws++;
+      });
+    });
+
+    const oppRows = Object.entries(oppStats).map(([name, s]) =>
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px">
+        <span style="color:var(--muted)">vs ${name}（${s.rounds}場）</span>
+        <span style="display:flex;gap:8px;align-items:center">
+          <span style="color:var(--green)">${s.wins}W</span><span style="color:var(--red)">${s.losses}L</span><span style="color:var(--muted)">${s.draws}D</span>
+          <span style="font-weight:700;color:${s.pts>0?'var(--green)':s.pts<0?'var(--red)':'var(--muted)'}">${s.pts>0?'+':''}${s.pts}pt</span>
+          <span style="font-weight:700;color:${s.money>=0?'var(--green)':'var(--red)'}">${s.money>=0?'+':''}$${s.money}</span>
+        </span>
+      </div>`
+    ).join('');
+
+    html += `<div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:40px;height:40px;border-radius:50%;background:${PC[pi%4]}22;color:${PC[pi%4]};display:flex;align-items:center;justify-content:center;font-weight:800">${PE[pi%4]}</div>
+        <div><div style="font-size:16px;font-weight:700">${p.name}</div><div style="font-size:12px;color:var(--muted)">${myRounds.length} 場</div></div>
+      </div>
+      <div class="stat-grid" style="margin-bottom:10px">
+        <div class="stat-box"><div class="sv" style="color:${totalPts>=0?'var(--green)':'var(--red)'}">${totalPts>0?'+':''}${totalPts}</div><div class="sl">累積積分</div></div>
+        <div class="stat-box"><div class="sv" style="font-size:16px;color:${totalMoney>=0?'var(--green)':'var(--red)'}">${totalMoney>=0?'+':''}$${totalMoney}</div><div class="sl">累積賭金</div></div>
+      </div>
+      ${oppRows ? `<div class="card-title" style="margin-bottom:4px">對手勝負明細</div>${oppRows}` : ''}
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+// ---- INIT ----
+initDB();
+selectedPlayers = [];
+selectedAmount = 100;
+selectedSkinAmount = 100;
+selectedLvAmount = 100;
+selectedCap = 0;
+</script>
+</body>
+</html>
